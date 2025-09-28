@@ -1,29 +1,30 @@
-.landing-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 2rem;
-  color: white;
+/* --- Conteneur du contenu sous la bannière --- */
+.content-container {
+  max-width: 900px;
+  /* RÈGLE DE CENTRAGE ESSENTIELLE */
+  margin: 0 auto;
+  padding: 4rem 2rem;
   text-align: center;
+  /* Le texte doit être BLANC pour être visible sur le fond landing.png */
+  color: white; 
 }
 
-.landing-title {
-  font-size: 3.5rem;
+/* --- Le titre du contenu --- */
+.content-title {
+  font-size: 3rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-/* On ajoute cette règle pour les lignes du titre */
 .title-line {
-  display: inline-flex; /* Permet aux lettres de rester alignées */
+  display: inline-flex;
 }
 
+/* --- ANIMATION DES LETTRES RESTAURÉE --- */
 @keyframes fadeInLetter {
   from {
     opacity: 0;
@@ -35,28 +36,29 @@
   }
 }
 
-.landing-title span span { /* On cible les spans des lettres */
+.content-title span span {
   opacity: 0;
   animation: fadeInLetter 0.5s forwards;
 }
+/* --- FIN ANIMATION TITRE --- */
 
-.landing-subtitle {
-  font-size: 1.5rem;
+
+.content-subtitle {
+  font-size: 1.3rem;
   margin-bottom: 2rem;
   font-weight: 300;
-  max-width: 700px;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
 }
 
-.landing-author {
+.content-author {
   margin-bottom: 2.5rem;
   font-style: italic;
   font-size: 1.1rem;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
 }
 
 .start-button {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 15px 30px;
@@ -69,6 +71,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+  /* --- ANIMATION DU BOUTON RESTAURÉE --- */
   animation: float 3s ease-in-out infinite;
 }
 
@@ -87,10 +90,12 @@
   50% { transform: translateY(-8px); }
   100% { transform: translateY(0px); }
 }
+/* --- FIN ANIMATION BOUTON --- */
 
+
+/* --- STYLE DU SLOGAN RESTAURÉ --- */
 .slogan {
-  position: absolute;
-  bottom: 80px;
+  margin-top: 3rem;
   font-size: 1.3rem;
   font-weight: bold;
   color: #FFD700;
@@ -106,29 +111,25 @@
     text-shadow: 0 0 20px #ffae00, 0 0 30px #ffae00, 2px 2px 8px rgba(0, 0, 0, 1);
   }
 }
+/* --- FIN STYLE SLOGAN --- */
 
+
+/* --- Styles pour Mobile --- */
 @media (max-width: 768px) {
-  .landing-container {
-    padding: 1rem;
+  .content-container {
+    padding: 2.5rem 1rem;
   }
 
-  .landing-title {
+  .content-title {
     font-size: 2.2rem;
-    letter-spacing: normal;
-    white-space: normal;
-    word-break: break-word;
-    direction: ltr;
-    border-right: none;
-    max-width: 100%;
   }
 
-  /* La règle magique pour le retour à la ligne */
   .title-line {
-    display: block; /* Force chaque ligne à prendre toute la largeur */
+    display: block;
     width: 100%;
   }
 
-  .landing-subtitle {
+  .content-subtitle {
     font-size: 1.1rem;
   }
 
@@ -138,8 +139,7 @@
   }
   
   .slogan {
-    font-size: 1rem;
-    bottom: 60px;
-    width: 90%;
+    font-size: 1.1rem;
+    margin-top: 2rem;
   }
 }
