@@ -1,46 +1,53 @@
-/* Réinitialisation des styles par défaut du navigateur */
+/* --- Définition des variables de couleur --- */
+:root[data-theme='dark'] {
+  --text-color: #ffffff;
+  --text-color-secondary: #ccc;
+  --header-bg: rgba(0, 0, 0, 0.6);
+  --header-logo-border: rgba(255, 255, 255, 0.8);
+  --card-bg: linear-gradient(145deg, #3a3a3a, #2c2c2c);
+  --card-text: #ffffff;
+  --content-section-bg: rgba(0, 0, 0, 0.3);
+}
+
+:root[data-theme='light'] {
+  --text-color: #1a1a1a;
+  --text-color-secondary: #555;
+  --header-bg: rgba(255, 255, 255, 0.7);
+  --header-logo-border: rgba(0, 0, 0, 0.8);
+  --card-bg: linear-gradient(145deg, #ffffff, #f0f0f0);
+  --card-text: #333;
+  --content-section-bg: rgba(255, 255, 255, 0.5);
+}
+
+/* On applique les variables */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  /* On ne met la transition que sur ce qui change */
 }
 
-/* Styles globaux pour le corps de l'application */
 body {
-  background-color: #1a1a1a; 
-  color: #fff;
   line-height: 1.6;
 }
 
-/* Classe pour le fond d'écran général du site */
+/* --- ON RESTAURE LES FONDS D'ÉCRAN --- */
+.app-background, .landing-background {
+  min-height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 .app-background {
-  min-height: 100vh;
-  width: 100%;
-  background-color: #242424; 
   background-image: url('./assets/background.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-color: #242424; /* Fallback si l'image ne charge pas */
 }
 
-/* Classe spécifique pour le fond d'écran de la Landing Page */
 .landing-background {
-  min-height: 100vh;
-  width: 100%;
-  background-color: #242424; 
-  background-image: url('/src/assets/landing.png'); /* On utilise un chemin absolu depuis la racine du projet */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-image: url('./assets/landing.png');
+  background-color: #242424; /* Fallback si l'image ne charge pas */
 }
-
-/* --- DEBUT DES STYLES POUR MOBILE --- */
-@media (max-width: 768px) {
-  body {
-    -webkit-text-size-adjust: 100%;
-  }
-}
-/* --- FIN DES STYLES POUR MOBILE --- */

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import NavigateBackButton from './common/NavigateBackButton';
+import ThemeSwitcher from './common/ThemeSwitcher'; // 1. Importer le bouton
 import './Header.css';
-import logo from '../assets/logo.png'; // 1. Importer le logo
+import logo from '../assets/logo.png';
 
 const Header = () => {
   const location = useLocation();
@@ -11,10 +12,14 @@ const Header = () => {
   return (
     <header className="app-header">
       <div className="header-content">
-        {!isHomePage && <NavigateBackButton />}
+        <div className="header-left">
+          {!isHomePage && <NavigateBackButton />}
+        </div>
         <h1 className="header-title">LokoLearn</h1>
-        {/* 2. Ajouter l'image du logo */}
-        <img src={logo} alt="LokoLearn Logo" className="header-logo" /> 
+        <div className="header-right">
+          <ThemeSwitcher /> {/* 2. Ajouter le bouton */}
+          <img src={logo} alt="LokoLearn Logo" className="header-logo" /> 
+        </div>
       </div>
     </header>
   );

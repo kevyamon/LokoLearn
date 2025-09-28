@@ -8,8 +8,9 @@ import ChoixMatierePage from './pages/ChoixMatierePage';
 import MatierePage from './pages/MatierePage';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import ScrollToTopButton from './components/common/ScrollToTopButton'; // 1. Importer le nouveau composant
+import ScrollToTopButton from './components/common/ScrollToTopButton';
 
+// On restaure le PageWrapper intelligent
 const PageWrapper = ({ children }) => {
   const location = useLocation();
   const backgroundClass = location.pathname === '/' ? 'landing-background' : 'app-background';
@@ -38,7 +39,7 @@ function App() {
           <Route path="/matiere/:annee/:matiereSlug" element={<MatierePage />} /> 
         </Routes>
       </PageWrapper>
-      <ScrollToTopButton /> {/* 2. Ajouter le bouton ici */}
+      <ScrollToTopButton />
     </Router>
   );
 }

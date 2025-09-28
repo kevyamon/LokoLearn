@@ -1,15 +1,16 @@
 .app-header {
   width: 100%;
   padding: 10px 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: var(--header-bg); /* On utilisera une variable */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: white;
+  color: var(--text-color); /* Variable */
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .header-content {
@@ -21,36 +22,38 @@
   padding: 0 20px;
 }
 
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .header-title {
   font-size: 2rem;
   font-weight: 700;
   letter-spacing: 2px;
   margin: 0;
-  flex-grow: 1; 
-  text-align: center;
 }
 
 .header-logo {
   height: 50px;
   width: 50px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.8);
+  border: 2px solid var(--header-logo-border); /* Variable */
   object-fit: cover;
 }
 
-/* --- DEBUT DES STYLES POUR MOBILE --- */
 @media (max-width: 768px) {
   .header-content {
-    padding: 0 10px; /* On réduit le padding horizontal */
+    padding: 0 10px;
   }
 
   .header-title {
-    font-size: 1.5rem; /* On réduit la taille du titre */
+    font-size: 1.2rem; /* On le réduit pour faire de la place */
   }
 
   .header-logo {
-    height: 40px; /* On réduit la taille du logo */
+    height: 40px;
     width: 40px;
   }
 }
-/* --- FIN DES STYLES POUR MOBILE --- */
