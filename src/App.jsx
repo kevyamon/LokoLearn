@@ -5,9 +5,10 @@ import ChoixFormationPage from './pages/ChoixFormationPage';
 import ChoixFilierePage from './pages/ChoixFilierePage';
 import ChoixNiveauPage from './pages/ChoixNiveauPage';
 import ChoixMatierePage from './pages/ChoixMatierePage';
-import MatierePage from './pages/MatierePage'; // Importer la nouvelle page
+import MatierePage from './pages/MatierePage';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ScrollToTopButton from './components/common/ScrollToTopButton'; // 1. Importer le nouveau composant
 
 const PageWrapper = ({ children }) => {
   const location = useLocation();
@@ -34,10 +35,10 @@ function App() {
           <Route path="/choix-filiere" element={<ChoixFilierePage />} />
           <Route path="/choix-niveau" element={<ChoixNiveauPage />} />
           <Route path="/matieres/:annee" element={<ChoixMatierePage />} />
-          {/* Nouvelle route avec deux paramètres */}
           <Route path="/matiere/:annee/:matiereSlug" element={<MatierePage />} /> 
         </Routes>
       </PageWrapper>
+      <ScrollToTopButton /> {/* 2. Ajouter le bouton ici */}
     </Router>
   );
 }
