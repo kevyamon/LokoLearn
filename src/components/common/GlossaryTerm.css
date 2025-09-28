@@ -8,7 +8,7 @@
 
 .tooltip {
   position: absolute;
-  bottom: 125%; /* Se positionne au-dessus du mot */
+  bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
   
@@ -18,20 +18,19 @@
   border-radius: 8px;
   border: 1px solid #00aaff;
   
-  width: 280px; /* Largeur fixe pour la bulle */
+  width: 280px;
   text-align: left;
   font-size: 0.9rem;
   line-height: 1.5;
   font-weight: normal;
   
-  /* L'astuce pour le cacher/afficher */
+  /* Par défaut, la bulle est cachée */
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 10;
 }
 
-/* Petite flèche sous la bulle */
 .tooltip::after {
   content: '';
   position: absolute;
@@ -43,7 +42,8 @@
   border-color: #00aaff transparent transparent transparent;
 }
 
-.glossary-term:hover .tooltip {
+/* On retire la règle :hover et on la remplace par celle-ci */
+.tooltip.visible {
   visibility: visible;
   opacity: 1;
 }

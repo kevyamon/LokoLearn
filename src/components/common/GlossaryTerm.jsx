@@ -1,20 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { glossaryData } from '../../data/glossaryData';
 import './GlossaryTerm.css';
 
 const GlossaryTerm = ({ term }) => {
-  // On cherche la définition dans nos données (en ignorant la casse)
+  const [isOpen, setIsOpen] = useState(false);
   const definition = glossaryData[term.toLowerCase()];
 
-  // Si le mot n'est pas dans le glossaire, on l'affiche simplement
+  // Effet pour fermer la bulle si on clique ailleurs
+  useEffect(() => {
+    const closeTooltip = () => setIsOpen(false);
+    if (isOpen) {
+      // On ajoute un écouteur de clic sur toute la page
+      document.addEventListener('click', closeTooltip);
+    }
+    // Nettoyage : on retire l'écouteur quand le composant n'est plus là ou quand la bulle se ferme
+    return () => {
+      document.removeEventListener('click', closeTooltip);
+    };
+  }, [isOpen]);
+
   if (!definition) {
     return <span>{term}</span>;
   }
 
+  const handleClick = (e) => {
+    e.stopPropagation(); // Empêche le clic de se propager et de fermer la bulle immédiatement
+    setIsOpen(!isOpen); // Inverse l'état d'ouverture (ouvert/fermé)
+  };
+
   return (
-    <span className="glossary-term">
+    <span className="glossary-term" onClick={handleClick}>
       {term}
-      <span className="tooltip">{definition}</span>
+      {/* On ajoute la classe 'visible' quand la bulle doit s'afficher */}
+      <span className={`tooltip ${isOpen ? 'visible' : ''}`}>{definition}</span>
     </span>
   );
 };
