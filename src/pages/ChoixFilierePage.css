@@ -1,0 +1,20 @@
+.choix-filiere-container {
+  padding: 100px 2rem 50px 2rem; /* Espace pour le header et le footer */
+  min-height: 100vh;
+  color: white;
+}
+
+.choix-filiere-title {
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 3rem;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.filiere-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}

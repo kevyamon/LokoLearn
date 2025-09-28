@@ -1,0 +1,66 @@
+.filiere-card {
+  background: linear-gradient(145deg, #3a3a3a, #2c2c2c);
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border: 2px solid transparent;
+}
+
+.filiere-card.active {
+  border-color: #00aaff;
+}
+
+.filiere-card.active:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 170, 255, 0.4);
+}
+
+.filiere-card.inactive {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.filiere-card.inactive::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.card-content {
+  z-index: 2;
+}
+
+.card-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.soon-badge {
+  position: absolute;
+  top: 10px;
+  right: -30px;
+  background-color: #ffc107;
+  color: #333;
+  padding: 5px 40px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transform: rotate(45deg);
+  z-index: 3;
+}

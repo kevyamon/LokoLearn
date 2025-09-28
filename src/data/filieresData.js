@@ -1,0 +1,37 @@
+export const filieres = [
+  // Filières Industrielles
+  {
+    name: 'Industries Agro-alimentaires et chimiques : option contrôle',
+    category: 'Industrielle',
+    active: true,
+  },
+  {
+    name: 'Industries Agro-alimentaires et chimiques : option production',
+    category: 'Industrielle',
+    active: false,
+  },
+  { name: 'Optique-Lunetterie', category: 'Industrielle', active: false },
+  { name: 'Mines Géologie Pétrole', category: 'Industrielle', active: false },
+  { name: 'Réseau Informatique et Télécomms', category: 'Industrielle', active: false },
+  { name: 'Génie Civil : option Bâtiment', category: 'Industrielle', active: false },
+  { name: 'Agriculture Tropicale : option production animale', category: 'Industrielle', active: false },
+  { name: 'Agriculture Tropicale : option production végétale', category: 'Industrielle', active: false },
+  { name: 'Communication Visuelle', category: 'Industrielle', active: false },
+  { name: 'Gestion de l\'Environnement et des Ressources Naturelles', category: 'Industrielle', active: false },
+  { name: 'Maintenance des Systèmes de Production', category: 'Industrielle', active: false },
+  { name: 'Electrotechnique', category: 'Industrielle', active: false },
+  { name: 'Informatique : Développeur d\'Application', category: 'Industrielle', active: false },
+  { name: 'Maintenance des Systèmes Electroniques et Informatiques', category: 'Industrielle', active: false },
+  { name: 'Cosmétologie', category: 'Industrielle', active: false },
+  { name: 'Génie Energétique et Environnement', category: 'Industrielle', active: false },
+  { name: 'Art, Aménagement et Cadre de Vie', category: 'Industrielle', active: false },
+  // Filières Tertiaires
+  { name: 'Gestion des Collectivités Territoriales', category: 'Tertiaire', active: false },
+  { name: 'Gestion Commerciale', category: 'Tertiaire', active: false },
+  { name: 'Finance Assurance', category: 'Tertiaire', active: false },
+  { name: 'Tourisme Hôtellerie', category: 'Tertiaire', active: false },
+  { name: 'Logistique', category: 'Tertiaire', active: false },
+  { name: 'Finance Comptabilité et Gestion d\'Entreprises', category: 'Tertiaire', active: false },
+  { name: 'Ressources Humaines et Communication', category: 'Tertiaire', active: false },
+  { name: 'Assistanat de Direction', category: 'Tertiaire', active: false },
+];

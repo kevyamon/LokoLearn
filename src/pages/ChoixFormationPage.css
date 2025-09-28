@@ -1,0 +1,71 @@
+.choix-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px); /* 100vh moins la hauteur du header et footer */
+  padding: 2rem;
+  color: white;
+  text-align: center;
+}
+
+.choix-title {
+  font-size: 2.8rem;
+  font-weight: 600;
+  margin-bottom: 4rem;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+}
+
+.choix-button {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  border: 5px solid white;
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  
+  /* L'animation de respiration */
+  animation: breathe 2.5s ease-in-out infinite;
+}
+
+.bts-button {
+  background: linear-gradient(135deg, #007bff, #0056b3); /* Dégradé de bleu */
+}
+
+.lmd-button {
+  background: linear-gradient(135deg, #28a745, #1e7e34); /* Dégradé de vert */
+}
+
+.choix-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  animation-play-state: paused; /* On met l'animation en pause au survol */
+}
+
+/* Keyframes pour l'animation de respiration */
+@keyframes breathe {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
