@@ -1,6 +1,6 @@
 import React from 'react';
-import { filieres } from '../data/filieresData'; // Importer les données
-import FiliereCard from '../components/FiliereCard'; // Importer le composant carte
+import { filieres } from '../data/filieresData';
+import FiliereCard from '../components/FiliereCard';
 import './ChoixFilierePage.css';
 
 const ChoixFilierePage = () => {
@@ -12,7 +12,9 @@ const ChoixFilierePage = () => {
           <FiliereCard 
             key={index} 
             name={filiere.name} 
-            active={filiere.active} 
+            active={filiere.active}
+            // On passe un délai d'animation calculé à chaque carte 
+            style={{ animationDelay: `${index * 50}ms` }}
           />
         ))}
       </div>

@@ -1,24 +1,23 @@
-import React, { useState } from 'react'; // 1. Importer useState
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Banner from '../components/common/Banner';
-import TransitionScreen from '../components/common/TransitionScreen'; // 2. Importer l'écran de transition
+import TransitionScreen from '../components/common/TransitionScreen';
+import { useSound } from '../hooks/useSound'; // 1. Importer notre hook
 import './LandingPage.css';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const titleParts = ["Bienvenue sur ", "LokoLearn"];
-  
-  // 3. Créer un état pour gérer l'affichage de la transition
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const { playClickSound, playHoverSound } = useSound(); // 2. Initialiser le hook
 
   const handleStart = () => {
-    // 4. Au clic, on lance la transition au lieu de naviguer
+    playClickSound(); // 3. Jouer le son au clic
     setIsTransitioning(true);
   };
 
   return (
     <div className="landing-page-wrapper">
-      {/* 5. On affiche l'écran de transition si l'état est 'true' */}
       {isTransitioning && (
         <TransitionScreen 
           onAnimationEnd={() => navigate('/choix-formation')} 
@@ -51,7 +50,11 @@ const LandingPage = () => {
           <p>Une initiative de Kévin Amon (Kevy)</p>
         </div>
         
-        <button onClick={handleStart} className="start-button">
+        <button 
+          onClick={handleStart} 
+          onMouseEnter={playHoverSound} // 4. Jouer le son au survol
+          className="start-button"
+        >
           <span role="img" aria-label="Graduate Cap" className="start-icon">🎓</span>
           Commencer l'aventure
         </button>

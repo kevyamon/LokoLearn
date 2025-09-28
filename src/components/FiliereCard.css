@@ -1,3 +1,15 @@
+/* On ajoute la définition de l'animation en haut du fichier */
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .filiere-card {
   background: linear-gradient(145deg, #3a3a3a, #2c2c2c);
   color: white;
@@ -15,6 +27,10 @@
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   border: 2px solid transparent;
+
+  /* On applique l'animation ici */
+  opacity: 0; /* La carte est invisible au début */
+  animation: cardFadeIn 0.5s ease-out forwards;
 }
 
 .filiere-card.active {
@@ -28,7 +44,8 @@
 
 .filiere-card.inactive {
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.7; /* On garde l'opacité pour les cartes inactives après l'animation */
+  animation-name: none; /* On pourrait désactiver l'anim pour elles si on veut */
 }
 
 .filiere-card.inactive::before {

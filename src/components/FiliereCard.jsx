@@ -1,15 +1,18 @@
 import React from 'react';
 import { useModal } from '../contexts/ModalContext';
-import { useNavigate } from 'react-router-dom'; // 1. Importer useNavigate
+import { useNavigate } from 'react-router-dom';
+import { useSound } from '../hooks/useSound'; // On ajoute les sons ici aussi
 import './FiliereCard.css';
 
-const FiliereCard = ({ name, active }) => {
+// Le composant accepte maintenant la prop 'style'
+const FiliereCard = ({ name, active, style }) => {
   const { showModal } = useModal();
-  const navigate = useNavigate(); // 2. Initialiser la fonction de navigation
+  const navigate = useNavigate();
+  const { playClickSound, playHoverSound } = useSound();
 
   const handleClick = () => {
+    playClickSound();
     if (active) {
-      // 3. Remplacer l'alerte par la navigation vers la page suivante
       navigate('/choix-niveau');
     } else {
       showModal(
@@ -21,8 +24,14 @@ const FiliereCard = ({ name, active }) => {
 
   const cardClasses = `filiere-card ${active ? 'active' : 'inactive'}`;
 
+  // On applique le style au conteneur principal
   return (
-    <div className={cardClasses} onClick={handleClick}>
+    <div 
+      className={cardClasses} 
+      onClick={handleClick} 
+      onMouseEnter={playHoverSound}
+      style={style}
+    >
       <div className="card-content">
         <h3>{name}</h3>
       </div>
