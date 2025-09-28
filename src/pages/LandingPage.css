@@ -1,51 +1,50 @@
 .landing-container {
   display: flex;
-  flex-direction: column; /* On organise les éléments verticalement */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 2rem;
   color: white;
   text-align: center;
-  /* On retire le fond noir pour laisser apparaître l'image de la page */
 }
-
-/* On supprime complètement les styles de .landing-content (la carte) */
 
 .landing-title {
   font-size: 3.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8); /* Ombre portée pour la lisibilité */
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-/* Animation Typewriter de droite à gauche */
-.typewriter {
-  overflow: hidden; /* Cache le texte qui n'est pas encore "tapé" */
-  border-left: .15em solid orange; /* Le curseur qui tape */
-  white-space: nowrap; /* Empêche le retour à la ligne */
-  margin: 0 auto;
-  letter-spacing: .15em;
-  animation: typing 3.5s steps(30, end), blink-caret .75s step-end infinite;
-  direction: rtl; /* Fait commencer l'animation de la droite */
+/* On ajoute cette règle pour les lignes du titre */
+.title-line {
+  display: inline-flex; /* Permet aux lettres de rester alignées */
 }
 
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
+@keyframes fadeInLetter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: orange; }
+.landing-title span span { /* On cible les spans des lettres */
+  opacity: 0;
+  animation: fadeInLetter 0.5s forwards;
 }
-
 
 .landing-subtitle {
   font-size: 1.5rem;
   margin-bottom: 2rem;
   font-weight: 300;
-  max-width: 700px; /* On limite la largeur pour une meilleure lisibilité */
+  max-width: 700px;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
 }
 
@@ -57,9 +56,9 @@
 }
 
 .start-button {
-  display: flex; /* Pour aligner l'icône et le texte */
+  display: flex;
   align-items: center;
-  gap: 10px; /* Espace entre l'icône et le texte */
+  gap: 10px;
   padding: 15px 30px;
   font-size: 1.2rem;
   font-weight: 600;
@@ -70,17 +69,17 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
-  animation: float 3s ease-in-out infinite; /* Animation continue */
+  animation: float 3s ease-in-out infinite;
 }
 
 .start-icon {
-  font-size: 1.5rem; /* On agrandit un peu l'icône */
+  font-size: 1.5rem;
 }
 
 .start-button:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(0, 123, 255, 0.6);
-  animation-play-state: paused; /* On arrête l'animation au survol */
+  animation-play-state: paused;
 }
 
 @keyframes float {
@@ -89,15 +88,14 @@
   100% { transform: translateY(0px); }
 }
 
-
 .slogan {
   position: absolute;
-  bottom: 80px; /* On le positionne en bas, au-dessus du footer */
+  bottom: 80px;
   font-size: 1.3rem;
   font-weight: bold;
-  color: #FFD700; /* Une couleur "or" remarquable */
+  color: #FFD700;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 1);
-  animation: glow 2s ease-in-out infinite alternate; /* Animation continue */
+  animation: glow 2s ease-in-out infinite alternate;
 }
 
 @keyframes glow {
@@ -109,13 +107,25 @@
   }
 }
 
-
-/* --- Styles pour mobile --- */
 @media (max-width: 768px) {
+  .landing-container {
+    padding: 1rem;
+  }
+
   .landing-title {
     font-size: 2.2rem;
-    letter-spacing: .1em;
-    animation: typing 3s steps(30, end), blink-caret .75s step-end infinite;
+    letter-spacing: normal;
+    white-space: normal;
+    word-break: break-word;
+    direction: ltr;
+    border-right: none;
+    max-width: 100%;
+  }
+
+  /* La règle magique pour le retour à la ligne */
+  .title-line {
+    display: block; /* Force chaque ligne à prendre toute la largeur */
+    width: 100%;
   }
 
   .landing-subtitle {
@@ -129,6 +139,7 @@
   
   .slogan {
     font-size: 1rem;
-    bottom: 60px; /* On le remonte un peu pour qu'il ne soit pas collé au footer */
+    bottom: 60px;
+    width: 90%;
   }
 }

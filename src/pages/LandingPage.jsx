@@ -4,6 +4,8 @@ import './LandingPage.css';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  // On sépare le titre en deux parties
+  const titleParts = ["Bienvenue sur", "LokoLearn"];
 
   const handleStart = () => {
     navigate('/choix-formation');
@@ -11,10 +13,23 @@ const LandingPage = () => {
 
   return (
     <div className="landing-container">
-      {/* Le titre avec une classe pour l'animation typewriter */}
-      <h1 className="landing-title typewriter">Bienvenue sur LokoLearn</h1>
+      <h1 className="landing-title">
+        {/* On boucle sur chaque partie du titre */}
+        {titleParts.map((part, partIndex) => (
+          <span key={partIndex} className="title-line">
+            {/* Et ensuite on boucle sur chaque lettre de la partie */}
+            {part.split('').map((char, charIndex) => (
+              <span 
+                key={charIndex} 
+                style={{ animationDelay: `${(partIndex * 10 + charIndex) * 0.08}s` }}
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
+          </span>
+        ))}
+      </h1>
       
-      {/* Le texte de présentation mis à jour */}
       <p className="landing-subtitle">
         Votre plateforme d'entraide pour réussir votre formation au sein du Groupe LOKO.
       </p>
@@ -23,13 +38,11 @@ const LandingPage = () => {
         <p>Une initiative de Kévin Amon (Kevy)</p>
       </div>
       
-      {/* Le nouveau bouton avec l'icône */}
       <button onClick={handleStart} className="start-button">
         <span role="img" aria-label="Graduate Cap" className="start-icon">🎓</span>
         Commencer l'aventure
       </button>
       
-      {/* Le slogan de l'école */}
       <p className="slogan">
         GROUPE LOKO, notre expérience fera toujours la différence.
       </p>

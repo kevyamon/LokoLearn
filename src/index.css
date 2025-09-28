@@ -8,8 +8,8 @@
 
 /* Styles globaux pour le corps de l'application */
 body {
-  background-color: #f0f2f5; /* Une couleur de fond sobre si l'image ne charge pas */
-  color: #333;
+  background-color: #1a1a1a; 
+  color: #fff;
   line-height: 1.6;
 }
 
@@ -17,20 +17,30 @@ body {
 .app-background {
   min-height: 100vh;
   width: 100%;
+  background-color: #242424; 
   background-image: url('./assets/background.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Le fond reste fixe au défilement */
+  background-attachment: fixed;
 }
 
 /* Classe spécifique pour le fond d'écran de la Landing Page */
 .landing-background {
   min-height: 100vh;
   width: 100%;
-  background-image: url('./assets/landing.png');
+  background-color: #242424; 
+  background-image: url('/src/assets/landing.png'); /* On utilise un chemin absolu depuis la racine du projet */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
+/* --- DEBUT DES STYLES POUR MOBILE --- */
+@media (max-width: 768px) {
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+}
+/* --- FIN DES STYLES POUR MOBILE --- */
