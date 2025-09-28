@@ -1,17 +1,17 @@
 import React from 'react';
 import { useModal } from '../contexts/ModalContext';
 import { useNavigate } from 'react-router-dom';
-import { useSound } from '../hooks/useSound'; // On ajoute les sons ici aussi
+// On retire l'import de useSound
 import './FiliereCard.css';
 
-// Le composant accepte maintenant la prop 'style'
-const FiliereCard = ({ name, active, style }) => {
+// On retire la prop 'style' qui n'est plus utilisée pour l'animation
+const FiliereCard = ({ name, active }) => {
   const { showModal } = useModal();
   const navigate = useNavigate();
-  const { playClickSound, playHoverSound } = useSound();
+  // On retire l'initialisation du hook useSound
 
   const handleClick = () => {
-    playClickSound();
+    // On retire l'appel à playClickSound()
     if (active) {
       navigate('/choix-niveau');
     } else {
@@ -24,13 +24,11 @@ const FiliereCard = ({ name, active, style }) => {
 
   const cardClasses = `filiere-card ${active ? 'active' : 'inactive'}`;
 
-  // On applique le style au conteneur principal
   return (
     <div 
       className={cardClasses} 
       onClick={handleClick} 
-      onMouseEnter={playHoverSound}
-      style={style}
+      // On retire l'événement onMouseEnter
     >
       <div className="card-content">
         <h3>{name}</h3>

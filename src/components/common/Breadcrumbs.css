@@ -1,0 +1,30 @@
+.breadcrumbs-container {
+  padding: 15px 20px;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #eee;
+  font-size: 0.9rem;
+  margin-top: 70px; /* Espace pour le header */
+}
+
+.breadcrumbs-container a {
+  color: #00aaff;
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.breadcrumbs-container a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbs-container span {
+  color: #ccc;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .breadcrumbs-container {
+        margin-top: 60px; /* On ajuste pour le header mobile */
+        padding: 10px 15px;
+        font-size: 0.8rem;
+    }
+}

@@ -9,8 +9,8 @@ import MatierePage from './pages/MatierePage';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTopButton from './components/common/ScrollToTopButton';
+import Breadcrumbs from './components/common/Breadcrumbs'; // 1. Importer le fil d'Ariane
 
-// On restaure le PageWrapper intelligent
 const PageWrapper = ({ children }) => {
   const location = useLocation();
   const backgroundClass = location.pathname === '/' ? 'landing-background' : 'app-background';
@@ -18,6 +18,7 @@ const PageWrapper = ({ children }) => {
   return (
     <div className={backgroundClass}>
       <Header />
+      <Breadcrumbs /> {/* 2. Ajouter le composant ici */}
       <main>
         {children}
       </main>
