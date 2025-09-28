@@ -1,0 +1,39 @@
+.modal-info-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  text-align: center;
+  min-width: 250px;
+}
+
+.modal-info-content h3 {
+  font-size: 1.6rem;
+  color: #00aaff;
+  margin-bottom: 5px;
+}
+
+.modal-info-content p {
+  font-size: 1.1rem;
+  max-width: 350px;
+  line-height: 1.5;
+  color: #eee;
+}
+
+.modal-info-button {
+  margin-top: 15px;
+  padding: 10px 35px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-info-button:hover {
+  background-color: #0056b3;
+}

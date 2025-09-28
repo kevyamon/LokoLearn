@@ -35,6 +35,7 @@
 .accordion-icon {
   font-size: 1rem;
   transition: transform 0.3s ease;
+  margin-left: 15px; /* Ajoute un peu d'espace avec le texte */
 }
 
 .accordion-icon.open {
@@ -64,3 +65,21 @@
 .accordion-content li:hover {
   background: rgba(0, 123, 255, 0.3);
 }
+
+/* --- DEBUT DES STYLES POUR MOBILE --- */
+@media (max-width: 768px) {
+  /* La correction magique est ici */
+  .accordion-header {
+    align-items: flex-start; /* Aligne les éléments en haut */
+  }
+
+  .accordion-header span:first-child { /* Cible le texte du titre */
+    white-space: normal; /* Autorise le retour à la ligne */
+    word-break: break-word; /* Coupe les mots si nécessaire */
+  }
+
+  .accordion-icon {
+    margin-top: 4px; /* Ajuste la position verticale de la flèche */
+  }
+}
+/* --- FIN DES STYLES POUR MOBILE --- */

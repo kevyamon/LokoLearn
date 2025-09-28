@@ -1,11 +1,16 @@
 import React from 'react';
+import { useModal } from '../../contexts/ModalContext'; // 1. Importer
 import './Accordion.css';
 
-// Ce composant interne gère un seul élément de l'accordéon (un chapitre)
 const AccordionItem = ({ titre, lecons, isOpen, onClick }) => {
+  const { showModal } = useModal(); // 2. Récupérer la fonction
+
   const handleLeconClick = (lecon) => {
-    // Ici, on mettra la logique pour afficher le contenu du cours
-    alert(`Affichage de la leçon : "${lecon}". Contenu à venir.`);
+    // 3. Remplacer l'alerte
+    showModal(
+      "Contenu à venir",
+      `Le contenu détaillé de la leçon "${lecon}" est en cours de rédaction.`
+    );
   };
 
   return (
@@ -29,12 +34,10 @@ const AccordionItem = ({ titre, lecons, isOpen, onClick }) => {
   );
 };
 
-// Ce composant principal gère toute la liste des chapitres
 const Accordion = ({ data }) => {
   const [openIndex, setOpenIndex] = React.useState(null);
 
   const handleItemClick = (index) => {
-    // Si on clique sur le chapitre déjà ouvert, on le ferme. Sinon, on ouvre le nouveau.
     setOpenIndex(openIndex === index ? null : index);
   };
 

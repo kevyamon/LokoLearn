@@ -1,15 +1,21 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Importer useNavigate
+import { useModal } from '../contexts/ModalContext';
+import { useNavigate } from 'react-router-dom'; // 1. Importer useNavigate
 import './FiliereCard.css';
 
 const FiliereCard = ({ name, active }) => {
-  const navigate = useNavigate(); // Initialiser le hook
+  const { showModal } = useModal();
+  const navigate = useNavigate(); // 2. Initialiser la fonction de navigation
 
   const handleClick = () => {
     if (active) {
-      navigate('/choix-niveau'); // Rediriger vers la page de choix du niveau
+      // 3. Remplacer l'alerte par la navigation vers la page suivante
+      navigate('/choix-niveau');
     } else {
-      alert("Cette filière est en cours d'ajout. Merci de votre patience !");
+      showModal(
+        "Filière en cours d'ajout",
+        "Le contenu pour cette filière sera bientôt disponible. Merci de votre patience !"
+      );
     }
   };
 
