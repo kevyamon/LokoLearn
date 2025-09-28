@@ -1,16 +1,15 @@
 .app-header {
   width: 100%;
   padding: 10px 0;
-  background-color: var(--header-bg); /* On utilisera une variable */
+  background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: var(--text-color); /* Variable */
+  color: white;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .header-content {
@@ -39,7 +38,7 @@
   height: 50px;
   width: 50px;
   border-radius: 50%;
-  border: 2px solid var(--header-logo-border); /* Variable */
+  border: 2px solid rgba(255, 255, 255, 0.8);
   object-fit: cover;
 }
 
@@ -49,7 +48,7 @@
   }
 
   .header-title {
-    font-size: 1.2rem; /* On le réduit pour faire de la place */
+    font-size: 1.2rem;
   }
 
   .header-logo {
