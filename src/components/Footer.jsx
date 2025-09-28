@@ -4,7 +4,7 @@ import './Footer.css'; // Et celui-ci
 const Footer = () => {
   return (
     <footer className="app-footer">
-      <p>&copy; 2024 LokoLearn - Développé par Kevy Amon. Tous droits réservés.</p>
+      <p>&copy; 2025 LokoLearn - Développé par Kevy Amon. Tous droits réservés.</p>
     </footer>
   );
 };
