@@ -57,3 +57,24 @@
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(0, 123, 255, 0.6);
 }
+
+/* --- DEBUT DES STYLES POUR MOBILE --- */
+@media (max-width: 768px) {
+  .landing-content {
+    padding: 25px; /* On réduit le padding interne */
+  }
+
+  .landing-title {
+    font-size: 2.5rem; /* On réduit la taille du titre */
+  }
+
+  .landing-subtitle {
+    font-size: 1.1rem; /* On réduit le sous-titre */
+  }
+
+  .start-button {
+    padding: 12px 25px; /* On réduit le bouton */
+    font-size: 1rem;
+  }
+}
+/* --- FIN DES STYLES POUR MOBILE --- */

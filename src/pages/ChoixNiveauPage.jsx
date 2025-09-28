@@ -12,7 +12,7 @@ const ChoixNiveauPage = () => {
 
   return (
     <div className="choix-container">
-      <h1 className="choix-title">Sélectionnez votre année</h1>
+      <h1 className="choix-title">Sélectionnez votre niveau</h1>
       <div className="buttons-container">
         <button 
           className="choix-button annee1-button"

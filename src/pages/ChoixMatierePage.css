@@ -18,3 +18,21 @@
   max-width: 1200px;
   margin: 0 auto;
 }
+
+/* --- DEBUT DES STYLES POUR MOBILE --- */
+@media (max-width: 768px) {
+  .choix-matiere-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .choix-matiere-title {
+    font-size: 2rem;
+  }
+
+  .matiere-grid {
+    grid-template-columns: 1fr; /* On passe à une seule colonne sur mobile */
+    gap: 1rem;
+  }
+}
+/* --- FIN DES STYLES POUR MOBILE --- */

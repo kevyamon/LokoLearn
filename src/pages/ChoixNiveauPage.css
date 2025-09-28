@@ -1,15 +1,24 @@
-/* On peut réutiliser une grande partie du style de ChoixFormationPage */
+/* On s'assure que l'import est la première règle du fichier */
 @import url('./ChoixFormationPage.css');
 
 /* On ajoute juste les couleurs spécifiques pour les nouveaux boutons */
 .annee1-button {
   background: linear-gradient(135deg, #007bff, #0056b3); /* Bleu */
-  font-size: 2rem; /* On ajuste la taille de la police */
+  font-size: 2rem;
   padding: 10px;
+  line-height: 1.2; /* Améliore l'affichage du texte sur plusieurs lignes */
 }
 
 .annee2-button {
   background: linear-gradient(135deg, #28a745, #1e7e34); /* Vert */
-  font-size: 2rem; /* On ajuste la taille de la police */
+  font-size: 2rem;
   padding: 10px;
+  line-height: 1.2;
+}
+
+/* On ajuste la taille de la police pour mobile, comme pour les autres boutons */
+@media (max-width: 768px) {
+  .annee1-button, .annee2-button {
+    font-size: 1.6rem;
+  }
 }

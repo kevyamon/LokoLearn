@@ -18,3 +18,22 @@
   max-width: 1400px;
   margin: 0 auto;
 }
+
+/* --- DEBUT DES STYLES POUR MOBILE --- */
+@media (max-width: 768px) {
+  .choix-filiere-container {
+    padding-left: 1rem; /* On réduit le padding de la page */
+    padding-right: 1rem;
+  }
+
+  .choix-filiere-title {
+    font-size: 2rem; /* On réduit la taille du titre */
+  }
+
+  .filiere-grid {
+    /* On ajuste la taille minimale des cartes pour un meilleur affichage sur mobile */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+}
+/* --- FIN DES STYLES POUR MOBILE --- */

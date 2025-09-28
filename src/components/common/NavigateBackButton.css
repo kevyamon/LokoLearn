@@ -1,4 +1,3 @@
-/* On retire complètement la position absolue */
 .back-button {
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
@@ -9,7 +8,6 @@
   font-size: 1rem;
   font-weight: 500;
   transition: all 0.3s ease;
-  /* On s'assure qu'il ne grandit pas pour occuper l'espace */
   flex-shrink: 0;
 }
 
@@ -17,3 +15,12 @@
   background-color: rgba(255, 255, 255, 0.2);
   border-color: white;
 }
+
+/* --- DEBUT DES STYLES POUR MOBILE --- */
+@media (max-width: 768px) {
+  .back-button {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+}
+/* --- FIN DES STYLES POUR MOBILE --- */

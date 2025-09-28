@@ -14,20 +14,18 @@
 
 .header-content {
   display: flex;
-  justify-content: space-between; /* Garde les éléments espacés */
+  justify-content: space-between;
   align-items: center;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px; /* Ajoute un peu d'espace sur les côtés */
+  padding: 0 20px;
 }
 
-/* On retire la position absolue pour que le titre reste dans le flux flexbox */
 .header-title {
   font-size: 2rem;
   font-weight: 700;
   letter-spacing: 2px;
   margin: 0;
-  /* On s'assure qu'il ne pousse pas les autres éléments */
   flex-grow: 1; 
   text-align: center;
 }
@@ -39,3 +37,20 @@
   border: 2px solid rgba(255, 255, 255, 0.8);
   object-fit: cover;
 }
+
+/* --- DEBUT DES STYLES POUR MOBILE --- */
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0 10px; /* On réduit le padding horizontal */
+  }
+
+  .header-title {
+    font-size: 1.5rem; /* On réduit la taille du titre */
+  }
+
+  .header-logo {
+    height: 40px; /* On réduit la taille du logo */
+    width: 40px;
+  }
+}
+/* --- FIN DES STYLES POUR MOBILE --- */

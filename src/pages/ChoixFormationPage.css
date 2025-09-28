@@ -108,3 +108,24 @@
 .lmd-modal-button:hover {
   background-color: #0056b3;
 }
+
+/* --- DEBUT DES STYLES POUR MOBILE --- */
+@media (max-width: 768px) {
+  .choix-title {
+    font-size: 2rem; /* On réduit la taille du titre */
+    margin-bottom: 3rem;
+  }
+
+  .buttons-container {
+    flex-direction: column; /* On empile les boutons */
+    gap: 2rem; /* On réduit l'écart */
+  }
+
+  .choix-button {
+    width: 180px; /* On réduit la taille des boutons */
+    height: 180px;
+    font-size: 2.2rem; /* On réduit la police dans les boutons */
+    border-width: 4px;
+  }
+}
+/* --- FIN DES STYLES POUR MOBILE --- */

@@ -69,3 +69,33 @@
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
+
+/* --- DEBUT DES STYLES POUR MOBILE --- */
+@media (max-width: 768px) {
+  .matiere-page-container {
+    padding: 80px 1rem 30px 1rem; /* On ajuste le padding global */
+  }
+
+  .content-section {
+    padding: 20px; /* On réduit le padding de la zone de contenu */
+  }
+
+  .matiere-title {
+    font-size: 2.2rem; /* On réduit le titre principal */
+  }
+
+  .accordion-container h2 {
+    font-size: 1.8rem; /* Titre du programme */
+  }
+
+  .accordion-header {
+    font-size: 1.1rem; /* Titre des chapitres */
+    padding: 15px;
+  }
+
+  .accordion-content li {
+    font-size: 1rem; /* Titre des leçons */
+    padding: 10px 12px;
+  }
+}
+/* --- FIN DES STYLES POUR MOBILE --- */
