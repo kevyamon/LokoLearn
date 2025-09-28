@@ -69,3 +69,42 @@
     transform: scale(1);
   }
 }
+
+/* Styles pour le contenu de la modale LMD */
+.lmd-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  text-align: center;
+}
+
+.lmd-modal-content h3 {
+  font-size: 1.6rem;
+  color: #ffc107; /* Jaune/Orange pour attirer l'attention */
+  margin-bottom: 5px;
+}
+
+.lmd-modal-content p {
+  font-size: 1.1rem;
+  max-width: 350px;
+  line-height: 1.5;
+}
+
+.lmd-modal-button {
+  margin-top: 15px;
+  padding: 10px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.lmd-modal-button:hover {
+  background-color: #0056b3;
+}

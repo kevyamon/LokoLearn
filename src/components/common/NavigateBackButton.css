@@ -1,8 +1,5 @@
+/* On retire complètement la position absolue */
 .back-button {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -12,6 +9,8 @@
   font-size: 1rem;
   font-weight: 500;
   transition: all 0.3s ease;
+  /* On s'assure qu'il ne grandit pas pour occuper l'espace */
+  flex-shrink: 0;
 }
 
 .back-button:hover {

@@ -4,7 +4,8 @@ import LandingPage from './pages/LandingPage';
 import ChoixFormationPage from './pages/ChoixFormationPage';
 import ChoixFilierePage from './pages/ChoixFilierePage';
 import ChoixNiveauPage from './pages/ChoixNiveauPage';
-import ChoixMatierePage from './pages/ChoixMatierePage'; // Importer la nouvelle page
+import ChoixMatierePage from './pages/ChoixMatierePage';
+import MatierePage from './pages/MatierePage'; // Importer la nouvelle page
 import Header from './components/Header';
 import Footer from './components/Footer';
 
@@ -32,8 +33,9 @@ function App() {
           <Route path="/choix-formation" element={<ChoixFormationPage />} />
           <Route path="/choix-filiere" element={<ChoixFilierePage />} />
           <Route path="/choix-niveau" element={<ChoixNiveauPage />} />
-          {/* La nouvelle route avec un paramètre :annee */}
-          <Route path="/matieres/:annee" element={<ChoixMatierePage />} /> 
+          <Route path="/matieres/:annee" element={<ChoixMatierePage />} />
+          {/* Nouvelle route avec deux paramètres */}
+          <Route path="/matiere/:annee/:matiereSlug" element={<MatierePage />} /> 
         </Routes>
       </PageWrapper>
     </Router>

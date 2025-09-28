@@ -1,6 +1,6 @@
 .app-header {
   width: 100%;
-  padding: 10px 0; /* On réduit un peu le padding vertical */
+  padding: 10px 0;
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -13,32 +13,29 @@
 }
 
 .header-content {
-  position: relative;
   display: flex;
-  justify-content: space-between; /* 1. On espace les éléments */
+  justify-content: space-between; /* Garde les éléments espacés */
   align-items: center;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 20px; /* Ajoute un peu d'espace sur les côtés */
 }
 
-/* On s'assure que le titre reste centré visuellement */
+/* On retire la position absolue pour que le titre reste dans le flux flexbox */
 .header-title {
   font-size: 2rem;
   font-weight: 700;
   letter-spacing: 2px;
   margin: 0;
-  /* Astuce pour garder le titre centré même avec les boutons sur les côtés */
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  /* On s'assure qu'il ne pousse pas les autres éléments */
+  flex-grow: 1; 
+  text-align: center;
 }
 
-/* 2. Ajout des styles pour le logo */
 .header-logo {
-  height: 50px; /* Taille du logo */
+  height: 50px;
   width: 50px;
-  border-radius: 50%; /* Pour l'arrondir */
+  border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.8);
-  object-fit: cover; /* S'assure que l'image remplit bien le cercle */
+  object-fit: cover;
 }

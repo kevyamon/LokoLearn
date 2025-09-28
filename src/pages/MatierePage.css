@@ -1,0 +1,71 @@
+.matiere-page-container {
+  padding: 100px 2rem 50px 2rem;
+  min-height: 100vh;
+  color: white;
+}
+
+.content-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 30px;
+  border-radius: 15px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.matiere-title {
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+}
+
+.placeholder-text {
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 40px;
+}
+
+/* Styles pour le contenu de la modale de choix */
+.modal-choix-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+.modal-choix-container h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.modal-button {
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.modal-button.cours {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.modal-button.tp {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+}
+
+.modal-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
