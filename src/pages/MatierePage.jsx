@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // 1. Importer useNavigate
 import { matieres } from '../data/matieresData';
 import { programmeData } from '../data/programmeData';
 import Modal from '../components/common/Modal';
@@ -8,24 +8,22 @@ import './MatierePage.css';
 
 const MatierePage = () => {
   const { annee, matiereSlug } = useParams();
+  const navigate = useNavigate(); // 2. Initialiser la navigation
   const anneeNum = parseInt(annee, 10);
 
-  // On retrouve les détails de la matière actuelle
   const currentMatiere = matieres.find(
     (m) => m.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '') === matiereSlug
   );
 
-  // State pour gérer la modale et la vue (Cours ou TP)
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [viewMode, setViewMode] = useState(null); // 'cours', 'tp', or null
+  const [viewMode, setViewMode] = useState(null);
 
-  // Effet pour décider s'il faut ouvrir la modale au chargement de la page
   useEffect(() => {
     if (currentMatiere) {
       if (currentMatiere.hasTP) {
         setIsModalOpen(true);
       } else {
-        setViewMode('cours'); // Si pas de TP, on affiche direct les cours
+        setViewMode('cours');
       }
     }
   }, [currentMatiere]);
@@ -40,7 +38,15 @@ const MatierePage = () => {
     setIsModalOpen(false);
   };
 
-  // On cherche le programme correspondant à la matière et à l'année
+  // 3. Créer une nouvelle fonction pour fermer la modale
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    // Si aucun choix n'a été fait (viewMode est toujours null), on retourne en arrière.
+    if (viewMode === null) {
+      navigate(-1);
+    }
+  };
+
   const programmeKey = `${currentMatiere?.name}-${anneeNum}`;
   const programme = programmeData[programmeKey] || programmeData['Default'];
 
@@ -50,8 +56,8 @@ const MatierePage = () => {
 
   return (
     <div className="matiere-page-container">
-      {/* La Modale pour le choix Cours/TP */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      {/* 4. Utiliser la nouvelle fonction pour le onClose */}
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <div className="modal-choix-container">
           <h2>Que souhaitez-vous consulter ?</h2>
           <div className="modal-buttons">
@@ -61,15 +67,12 @@ const MatierePage = () => {
         </div>
       </Modal>
 
-      {/* Affichage conditionnel du contenu */}
       {viewMode === 'cours' && (
         <div className="content-section">
           <h1 className="matiere-title">{currentMatiere.name}</h1>
-          {/* Ici on mettra les boutons pour les sections (Programme, Cours, etc.) */}
           <div className="section-content">
             <Accordion data={programme} />
           </div>
-          {/* On ajoutera les autres sections ici */}
         </div>
       )}
 
@@ -77,7 +80,6 @@ const MatierePage = () => {
         <div className="content-section">
           <h1 className="matiere-title">{currentMatiere.name} - Travaux Pratiques</h1>
           <p className="placeholder-text">La section des TP est en cours de construction. Revenez bientôt !</p>
-          {/* On affichera les cartes circulaires des TP ici */}
         </div>
       )}
     </div>

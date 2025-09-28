@@ -6,10 +6,11 @@ import ChoixFilierePage from './pages/ChoixFilierePage';
 import ChoixNiveauPage from './pages/ChoixNiveauPage';
 import ChoixMatierePage from './pages/ChoixMatierePage';
 import MatierePage from './pages/MatierePage';
+import LeconPage from './pages/LeconPage'; // L'import qui manquait
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTopButton from './components/common/ScrollToTopButton';
-import Breadcrumbs from './components/common/Breadcrumbs'; // 1. Importer le fil d'Ariane
+import Breadcrumbs from './components/common/Breadcrumbs';
 
 const PageWrapper = ({ children }) => {
   const location = useLocation();
@@ -18,7 +19,7 @@ const PageWrapper = ({ children }) => {
   return (
     <div className={backgroundClass}>
       <Header />
-      <Breadcrumbs /> {/* 2. Ajouter le composant ici */}
+      <Breadcrumbs />
       <main>
         {children}
       </main>
@@ -38,6 +39,7 @@ function App() {
           <Route path="/choix-niveau" element={<ChoixNiveauPage />} />
           <Route path="/matieres/:annee" element={<ChoixMatierePage />} />
           <Route path="/matiere/:annee/:matiereSlug" element={<MatierePage />} /> 
+          <Route path="/lecon/:annee/:matiereSlug/:chapitreIndex/:leconIndex" element={<LeconPage />} />
         </Routes>
       </PageWrapper>
       <ScrollToTopButton />

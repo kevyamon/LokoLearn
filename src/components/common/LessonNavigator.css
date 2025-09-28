@@ -1,0 +1,26 @@
+.lesson-navigator {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: #0056b3;
+}
+
+.nav-button.disabled {
+  background-color: #555;
+  color: #aaa;
+  cursor: not-allowed;
+}

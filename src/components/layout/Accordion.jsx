@@ -1,16 +1,15 @@
 import React from 'react';
-import { useModal } from '../../contexts/ModalContext'; // 1. Importer
+import { useNavigate, useParams } from 'react-router-dom'; // 1. Importer les hooks
 import './Accordion.css';
 
-const AccordionItem = ({ titre, lecons, isOpen, onClick }) => {
-  const { showModal } = useModal(); // 2. Récupérer la fonction
+// On passe l'index du chapitre en prop
+const AccordionItem = ({ titre, lecons, isOpen, onClick, chapitreIndex }) => {
+  const navigate = useNavigate();
+  const { annee, matiereSlug } = useParams(); // 2. On récupère les infos de l'URL
 
-  const handleLeconClick = (lecon) => {
-    // 3. Remplacer l'alerte
-    showModal(
-      "Contenu à venir",
-      `Le contenu détaillé de la leçon "${lecon}" est en cours de rédaction.`
-    );
+  const handleLeconClick = (leconIndex) => {
+    // 3. On navigue vers la page de la leçon avec toutes les infos
+    navigate(`/lecon/${annee}/${matiereSlug}/${chapitreIndex}/${leconIndex}`);
   };
 
   return (
@@ -23,7 +22,7 @@ const AccordionItem = ({ titre, lecons, isOpen, onClick }) => {
         <div className="accordion-content">
           <ul>
             {lecons.map((lecon, index) => (
-              <li key={index} onClick={() => handleLeconClick(lecon)}>
+              <li key={index} onClick={() => handleLeconClick(index)}>
                 {lecon}
               </li>
             ))}
@@ -51,6 +50,7 @@ const Accordion = ({ data }) => {
           lecons={chapitre.lecons}
           isOpen={openIndex === index}
           onClick={() => handleItemClick(index)}
+          chapitreIndex={index} // 4. On passe l'index du chapitre
         />
       ))}
     </div>
