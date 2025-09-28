@@ -2,12 +2,12 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { programmeData } from '../data/programmeData';
 import LessonNavigator from '../components/common/LessonNavigator';
+import GlossaryTerm from '../components/common/GlossaryTerm'; // 1. Importer le composant
 import './LeconPage.css';
 
 const LeconPage = () => {
   const { annee, matiereSlug, chapitreIndex, leconIndex } = useParams();
   
-  // Retrouver le programme et la leçon actuels
   const matiereName = matiereSlug.replace(/-/g, ' ').replace(/(^\w|\s\w)/g, m => m.toUpperCase());
   const programmeKey = `${matiereName}-${annee}`;
   const programme = programmeData[programmeKey] || programmeData['Default'];
@@ -18,7 +18,7 @@ const LeconPage = () => {
   const chapitreActuel = programme.chapitres[chapIdx];
   const leconActuelle = chapitreActuel?.lecons[leconIdx];
 
-  // --- Logique pour trouver la leçon précédente et suivante ---
+  // --- Logique pour trouver la leçon précédente et suivante (inchangée) ---
   let prevLesson = null;
   if (leconIdx > 0) {
     prevLesson = { url: `/lecon/${annee}/${matiereSlug}/${chapIdx}/${leconIdx - 1}` };
@@ -33,7 +33,6 @@ const LeconPage = () => {
   } else if (chapIdx < programme.chapitres.length - 1) {
     nextLesson = { url: `/lecon/${annee}/${matiereSlug}/${chapIdx + 1}/0` };
   }
-  // --- Fin de la logique ---
 
   if (!leconActuelle) {
     return <div className="lecon-container">Leçon non trouvée.</div>;
@@ -43,11 +42,16 @@ const LeconPage = () => {
     <div className="lecon-container">
       <div className="lecon-content">
         <h1 className="lecon-title">{leconActuelle}</h1>
+
+        {/* 2. Exemple d'utilisation du glossaire interactif */}
         <p className="lecon-body">
-          Le contenu de cette leçon est en cours de rédaction et sera bientôt disponible. 
-          Cette page affichera toutes les explications, exemples et schémas nécessaires 
-          pour une compréhension parfaite du sujet.
+          Le contenu de cette leçon est en cours de rédaction. 
+          Ici, nous parlerons de la <GlossaryTerm term="glycolyse" />, un processus fondamental
+          pour les cellules <GlossaryTerm term="procaryote" /> et <GlossaryTerm term="eucaryote" />.
+          Nous verrons aussi comment un <GlossaryTerm term="autoclave" /> est utilisé pour 
+          stériliser le matériel en éliminant toute <GlossaryTerm term="bactérie" />.
         </p>
+        
         <LessonNavigator prevLesson={prevLesson} nextLesson={nextLesson} />
       </div>
     </div>

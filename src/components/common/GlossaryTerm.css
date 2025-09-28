@@ -1,0 +1,49 @@
+.glossary-term {
+  position: relative;
+  cursor: help;
+  color: #00aaff;
+  font-weight: bold;
+  border-bottom: 2px dotted #00aaff;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 125%; /* Se positionne au-dessus du mot */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  background-color: #2c2c2c;
+  color: #eee;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #00aaff;
+  
+  width: 280px; /* Largeur fixe pour la bulle */
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-weight: normal;
+  
+  /* L'astuce pour le cacher/afficher */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 10;
+}
+
+/* Petite flèche sous la bulle */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #00aaff transparent transparent transparent;
+}
+
+.glossary-term:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
