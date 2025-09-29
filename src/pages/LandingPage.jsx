@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom'; // 1. Importer useSearchParams
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Banner from '../components/common/Banner';
 import BannerToggle from '../components/common/BannerToggle';
 import TransitionScreen from '../components/common/TransitionScreen';
@@ -8,7 +8,7 @@ import './LandingPage.css';
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams(); // 2. Initialiser le hook pour lire l'URL
+  const [searchParams] = useSearchParams();
   const titleParts = ["Bienvenue sur ", "LokoLearn"];
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { playClickSound, playHoverSound } = useSound();
@@ -17,7 +17,6 @@ const LandingPage = () => {
     localStorage.getItem('bannerVisible') === 'false' ? false : true
   );
 
-  // 3. Vérifier si le mode admin est activé dans l'URL
   const isAdmin = searchParams.get('admin') === 'true';
 
   useEffect(() => {
@@ -43,7 +42,6 @@ const LandingPage = () => {
         />
       )}
 
-      {/* 4. Afficher le bouton de contrôle UNIQUEMENT si isAdmin est true */}
       {isAdmin && <BannerToggle isVisible={isBannerVisible} toggleBanner={toggleBanner} />}
 
       {isBannerVisible && <Banner />}
@@ -78,7 +76,8 @@ const LandingPage = () => {
           className="start-button"
         >
           <span role="img" aria-label="Graduate Cap" className="start-icon">🎓</span>
-          Commencer l'aventure
+          {/* Le texte du bouton est maintenant mis à jour */}
+          Trouver un Cours
         </button>
         
         <p className="slogan">
