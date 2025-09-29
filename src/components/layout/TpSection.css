@@ -1,0 +1,25 @@
+.tp-section {
+  margin-bottom: 30px;
+}
+
+.tp-section-title {
+  font-size: 1.8rem;
+  color: #00aaff;
+  border-bottom: 2px solid #00aaff;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.tp-section-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.tp-section-content p, .tp-section-content ul {
+  margin-bottom: 15px;
+}
+
+.tp-section-content ul {
+  list-style-position: inside;
+  padding-left: 10px;
+}

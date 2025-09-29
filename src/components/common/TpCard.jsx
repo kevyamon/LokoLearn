@@ -1,25 +1,20 @@
 import React from 'react';
-import { useModal } from '../../contexts/ModalContext';
-import { useSound } from '../../hooks/useSound';
+import { useNavigate, useParams } from 'react-router-dom'; // 1. Importer les hooks
 import './TpCard.css';
 
-const TpCard = ({ title, description }) => {
-  const { showModal } = useModal();
-  const { playClickSound, playHoverSound } = useSound();
+const TpCard = ({ id, title, description }) => { // 2. Accepter l'ID du TP
+  const navigate = useNavigate();
+  const { annee, matiereSlug } = useParams(); // On récupère les infos de l'URL
 
   const handleClick = () => {
-    playClickSound();
-    showModal(
-      "Contenu en construction",
-      `Le protocole pour le ${title} (${description}) sera bientôt disponible.`
-    );
+    // 3. Naviguer vers la page de détail avec toutes les infos
+    navigate(`/tp/${annee}/${matiereSlug}/${id}`);
   };
 
   return (
     <div 
       className="tp-card" 
       onClick={handleClick}
-      onMouseEnter={playHoverSound}
     >
       <div className="tp-card-content">
         <h3>{title}</h3>

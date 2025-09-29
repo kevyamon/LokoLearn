@@ -1,0 +1,32 @@
+.banner-toggle {
+  position: absolute;
+  top: 85px; /* Juste en dessous du header */
+  right: 20px;
+  z-index: 1001; /* Au-dessus de la bannière */
+
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.banner-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .banner-toggle {
+    top: 75px;
+    right: 15px;
+  }
+}

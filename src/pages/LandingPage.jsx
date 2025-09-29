@@ -1,30 +1,52 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom'; // 1. Importer useSearchParams
 import Banner from '../components/common/Banner';
+import BannerToggle from '../components/common/BannerToggle';
 import TransitionScreen from '../components/common/TransitionScreen';
-import { useSound } from '../hooks/useSound'; // 1. Importer notre hook
+import { useSound } from '../hooks/useSound';
 import './LandingPage.css';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams(); // 2. Initialiser le hook pour lire l'URL
   const titleParts = ["Bienvenue sur ", "LokoLearn"];
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const { playClickSound, playHoverSound } = useSound(); // 2. Initialiser le hook
+  const { playClickSound, playHoverSound } = useSound();
+
+  const [isBannerVisible, setIsBannerVisible] = useState(
+    localStorage.getItem('bannerVisible') === 'false' ? false : true
+  );
+
+  // 3. Vérifier si le mode admin est activé dans l'URL
+  const isAdmin = searchParams.get('admin') === 'true';
+
+  useEffect(() => {
+    localStorage.setItem('bannerVisible', isBannerVisible);
+  }, [isBannerVisible]);
+
+  const toggleBanner = () => {
+    setIsBannerVisible(!isBannerVisible);
+  };
 
   const handleStart = () => {
-    playClickSound(); // 3. Jouer le son au clic
+    playClickSound();
     setIsTransitioning(true);
   };
 
+  const wrapperClass = `landing-page-wrapper ${isBannerVisible ? 'with-banner' : 'no-banner'}`;
+
   return (
-    <div className="landing-page-wrapper">
+    <div className={wrapperClass}>
       {isTransitioning && (
         <TransitionScreen 
           onAnimationEnd={() => navigate('/choix-formation')} 
         />
       )}
 
-      <Banner />
+      {/* 4. Afficher le bouton de contrôle UNIQUEMENT si isAdmin est true */}
+      {isAdmin && <BannerToggle isVisible={isBannerVisible} toggleBanner={toggleBanner} />}
+
+      {isBannerVisible && <Banner />}
 
       <div className="content-container">
         <h1 className="content-title">
@@ -52,7 +74,7 @@ const LandingPage = () => {
         
         <button 
           onClick={handleStart} 
-          onMouseEnter={playHoverSound} // 4. Jouer le son au survol
+          onMouseEnter={playHoverSound}
           className="start-button"
         >
           <span role="img" aria-label="Graduate Cap" className="start-icon">🎓</span>

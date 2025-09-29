@@ -17,6 +17,7 @@ const TpListPage = () => {
         {tps.map((tp) => (
           <TpCard 
             key={tp.id}
+            id={tp.id} // On passe l'ID à la carte
             title={tp.title}
             description={tp.description}
           />
