@@ -1,36 +1,44 @@
-// Exemple de structure de données pour le programme
+// On met à jour avec les vrais chapitres et leçons du PDF
 export const programmeData = {
-  'Microbiologie-1': { // Clé unique: nomMatiere-annee
-    titre: 'Programme de Microbiologie - 1ère Année',
+  'Microbiologie-1': { 
+    titre: 'Programme de Microbiologie - 1er Niveau',
     chapitres: [
       {
-        titre: 'Chapitre 1: Introduction à la Microbiologie',
+        titre: 'Chapitre 1: Fondamentaux de la Microbiologie Alimentaire',
         lecons: [
-          'Histoire de la microbiologie et ses domaines',
-          'Les grands groupes de micro-organismes',
-          'La cellule procaryote et eucaryote',
+          'Taxonomie et Caractérisation du Monde Microbien', // [cite: 4]
+          'Cartographie de l\'Impact Microbien en IAA', // [cite: 85]
         ],
       },
       {
-        titre: 'Chapitre 2: Bactériologie',
+        titre: 'Chapitre 2: Maîtrise de la Croissance Microbienne',
         lecons: [
-          'Structure et morphologie des bactéries',
-          'La croissance bactérienne et sa mesure',
-          'Métabolisme bactérien',
-          'Classification des bactéries',
+          'Les 6 Facteurs de Croissance (FAT TOM)', // [cite: 209]
         ],
       },
       {
-        titre: 'Chapitre 3: Virologie',
+        titre: 'Chapitre 3: Pathogènes Majeurs et HACCP',
         lecons: [
-          'Structure et classification des virus',
-          'Le cycle de réplication viral',
+          'Monographies des Bactéries Pathogènes Clés', // [cite: 382]
+          'Philosophie et Concepts Clés du HACCP', // [cite: 459]
         ],
       },
     ],
   },
-  // On ajoutera les autres matières et années ici...
-  'Default': { // Un programme par défaut si rien n'est trouvé
+  // On peut déjà préparer la structure pour la matière "Qualité"
+  'Qualité-2': {
+    titre: 'Programme de Qualité - 2ème Niveau',
+    chapitres: [
+        {
+            titre: 'Chapitre 1: Les Piliers de la Qualité et le Cadre Normatif',
+            lecons: [
+                'Déconstruction de la "Qualité" en IAA', // [cite: 142]
+                'Le Langage de la Conformité : Normalisation, Certification, Accréditation', // [cite: 167]
+            ]
+        }
+    ]
+  },
+  'Default': {
       titre: 'Programme en cours de rédaction',
       chapitres: [
           {
