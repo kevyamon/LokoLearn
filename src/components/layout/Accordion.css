@@ -35,7 +35,7 @@
 .accordion-icon {
   font-size: 1rem;
   transition: transform 0.3s ease;
-  margin-left: 15px; /* Ajoute un peu d'espace avec le texte */
+  margin-left: 15px;
 }
 
 .accordion-icon.open {
@@ -60,26 +60,33 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
   border-left: 3px solid #007bff;
+  display: flex; /* Permet un meilleur alignement de l'icône */
+  justify-content: space-between; /* Place l'icône à droite */
+  align-items: center;
 }
 
 .accordion-content li:hover {
   background: rgba(0, 123, 255, 0.3);
 }
 
-/* --- DEBUT DES STYLES POUR MOBILE --- */
 @media (max-width: 768px) {
-  /* La correction magique est ici */
   .accordion-header {
-    align-items: flex-start; /* Aligne les éléments en haut */
+    align-items: flex-start;
   }
 
-  .accordion-header span:first-child { /* Cible le texte du titre */
-    white-space: normal; /* Autorise le retour à la ligne */
-    word-break: break-word; /* Coupe les mots si nécessaire */
+  .accordion-header span:first-child {
+    white-space: normal;
+    word-break: break-word;
   }
 
   .accordion-icon {
-    margin-top: 4px; /* Ajuste la position verticale de la flèche */
+    margin-top: 4px;
   }
 }
-/* --- FIN DES STYLES POUR MOBILE --- */
+
+/* Style pour l'icône de complétion */
+.completion-check {
+  margin-left: 10px;
+  font-size: 0.9rem;
+  color: #28a745; /* Vert */
+}
