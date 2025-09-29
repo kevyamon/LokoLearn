@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // 1. Importer useNavigate
+import { useParams, useNavigate } from 'react-router-dom';
 import { matieres } from '../data/matieresData';
 import { programmeData } from '../data/programmeData';
 import Modal from '../components/common/Modal';
@@ -8,7 +8,7 @@ import './MatierePage.css';
 
 const MatierePage = () => {
   const { annee, matiereSlug } = useParams();
-  const navigate = useNavigate(); // 2. Initialiser la navigation
+  const navigate = useNavigate();
   const anneeNum = parseInt(annee, 10);
 
   const currentMatiere = matieres.find(
@@ -34,14 +34,12 @@ const MatierePage = () => {
   };
 
   const handleSelectTP = () => {
-    setViewMode('tp');
-    setIsModalOpen(false);
+    // Redirige vers la nouvelle page de la liste des TP
+    navigate(`/tp/${annee}/${matiereSlug}`);
   };
 
-  // 3. Créer une nouvelle fonction pour fermer la modale
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    // Si aucun choix n'a été fait (viewMode est toujours null), on retourne en arrière.
     if (viewMode === null) {
       navigate(-1);
     }
@@ -56,7 +54,6 @@ const MatierePage = () => {
 
   return (
     <div className="matiere-page-container">
-      {/* 4. Utiliser la nouvelle fonction pour le onClose */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <div className="modal-choix-container">
           <h2>Que souhaitez-vous consulter ?</h2>
@@ -77,9 +74,10 @@ const MatierePage = () => {
       )}
 
       {viewMode === 'tp' && (
+        // Cette partie ne sera plus jamais affichée, mais on la laisse par sécurité
         <div className="content-section">
           <h1 className="matiere-title">{currentMatiere.name} - Travaux Pratiques</h1>
-          <p className="placeholder-text">La section des TP est en cours de construction. Revenez bientôt !</p>
+          <p className="placeholder-text">Redirection...</p>
         </div>
       )}
     </div>

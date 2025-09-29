@@ -6,7 +6,8 @@ import ChoixFilierePage from './pages/ChoixFilierePage';
 import ChoixNiveauPage from './pages/ChoixNiveauPage';
 import ChoixMatierePage from './pages/ChoixMatierePage';
 import MatierePage from './pages/MatierePage';
-import LeconPage from './pages/LeconPage'; // L'import qui manquait
+import LeconPage from './pages/LeconPage';
+import TpListPage from './pages/TpListPage'; // L'import pour la nouvelle page
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTopButton from './components/common/ScrollToTopButton';
@@ -40,6 +41,8 @@ function App() {
           <Route path="/matieres/:annee" element={<ChoixMatierePage />} />
           <Route path="/matiere/:annee/:matiereSlug" element={<MatierePage />} /> 
           <Route path="/lecon/:annee/:matiereSlug/:chapitreIndex/:leconIndex" element={<LeconPage />} />
+          {/* La nouvelle route pour la liste des TP */}
+          <Route path="/tp/:annee/:matiereSlug" element={<TpListPage />} />
         </Routes>
       </PageWrapper>
       <ScrollToTopButton />
