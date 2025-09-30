@@ -1,11 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { programmeData } from 'data/programmeData';
-// On s'assure que le chemin d'import se termine bien par .jsx
-import { leconContentData } from 'data/leconContentData.jsx'; 
-import LessonNavigator from 'components/common/LessonNavigator';
-import CompletionCheckbox from 'components/common/CompletionCheckbox';
-import GlossaryTerm from 'components/common/GlossaryTerm';
+import { programmeData } from '../data/programmeData';
+// On importe le fichier avec la bonne extension .jsx
+import { leconContentData } from '../data/leconContentData.jsx'; 
+import LessonNavigator from '../components/common/LessonNavigator';
+import CompletionCheckbox from '../components/common/CompletionCheckbox';
+// L'import de GlossaryTerm est retiré car il n'est pas utilisé directement ici
 import './LeconPage.css';
 
 const LeconPage = () => {
