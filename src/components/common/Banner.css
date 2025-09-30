@@ -109,3 +109,7 @@
     display: none;
   }
 }
+/* ... en bas du fichier ... */
+.hero-banner-container.placeholder {
+    background-color: #333;
+}
