@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Banner from '../components/common/Banner';
-import BannerToggle from '../components/common/BannerToggle';
 import TransitionScreen from '../components/common/TransitionScreen';
 import { useSound } from '../hooks/useSound';
 import './LandingPage.css';
@@ -13,36 +12,20 @@ const LandingPage = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { playClickSound, playHoverSound } = useSound();
 
-  const [isBannerVisible, setIsBannerVisible] = useState(
-    localStorage.getItem('bannerVisible') === 'false' ? false : true
-  );
-
-  const isAdmin = searchParams.get('admin') === 'true';
-
-  useEffect(() => {
-    localStorage.setItem('bannerVisible', isBannerVisible);
-  }, [isBannerVisible]);
-
-  const toggleBanner = () => {
-    setIsBannerVisible(!isBannerVisible);
-  };
+  const isBannerVisible = localStorage.getItem('bannerVisible') !== 'false';
 
   const handleStart = () => {
     playClickSound();
     setIsTransitioning(true);
   };
 
-  const wrapperClass = `landing-page-wrapper ${isBannerVisible ? 'with-banner' : 'no-banner'}`;
-
   return (
-    <div className={wrapperClass}>
+    <div className={`landing-page-wrapper ${isBannerVisible ? 'with-banner' : 'no-banner'}`}>
       {isTransitioning && (
         <TransitionScreen 
           onAnimationEnd={() => navigate('/login')} 
         />
       )}
-
-      {isAdmin && <BannerToggle isVisible={isBannerVisible} toggleBanner={toggleBanner} />}
 
       {isBannerVisible && <Banner />}
 
