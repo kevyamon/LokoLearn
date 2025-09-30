@@ -56,3 +56,25 @@
     width: 40px;
   }
 }
+
+/* ... styles précédents ... */
+
+.admin-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(45deg, #ffd700, #ffae00);
+  color: #1a1a1a;
+  padding: 8px 15px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.admin-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+}

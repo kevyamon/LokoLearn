@@ -7,9 +7,8 @@ import logo from '../assets/logo.png';
 
 const Header = () => {
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
+  const isLoginPage = location.pathname === '/login' || location.pathname === '/';
 
-  // On lit les informations de l'utilisateur depuis le localStorage
   const userInfoString = localStorage.getItem('userInfo');
   const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
 
@@ -17,14 +16,17 @@ const Header = () => {
     <header className="app-header">
       <div className="header-content">
         <div className="header-left">
-          {!isHomePage && <NavigateBackButton />}
+          {!isLoginPage && <NavigateBackButton />}
         </div>
         <h1 className="header-title">LokoLearn</h1>
         <div className="header-right">
-          <SearchButton />
-          {/* Affiche le bouton Admin seulement si l'utilisateur est connecté ET est admin */}
-          {userInfo && userInfo.isAdmin && (
-            <Link to="/admin" className="admin-button">Espace Admin</Link>
+          {!isLoginPage && <SearchButton />}
+          {/* Affiche le bouton Admin seulement si on n'est PAS sur la page de connexion ET que l'utilisateur est admin */}
+          {userInfo && userInfo.isAdmin && !isLoginPage && (
+            <Link to="/admin" className="admin-button">
+              <span role="img" aria-label="Admin">👑</span>
+              Administration
+            </Link>
           )}
           <img src={logo} alt="LokoLearn Logo" className="header-logo" /> 
         </div>

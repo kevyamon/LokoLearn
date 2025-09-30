@@ -28,7 +28,6 @@ const LoginPage = () => {
         throw new Error(data.message || 'Une erreur est survenue');
       }
 
-      // Si la connexion réussit
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate('/choix-formation');
 
@@ -42,10 +41,13 @@ const LoginPage = () => {
       <div className="login-box">
         <h2>Connexion</h2>
         <p>Veuillez entrer votre matricule pour accéder à la plateforme.</p>
+        {/* On ajoute le nouveau texte ici */}
+        <p className="matricule-info">C'est le matricule se trouvant sur votre carte d'étudiant.</p>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Ex: 12345-M1"
+            // On retire le long placeholder
+            placeholder="Matricule..."
             value={matricule}
             onChange={(e) => setMatricule(e.target.value)}
             required

@@ -23,8 +23,16 @@
 }
 
 .login-box p {
-  margin-bottom: 30px;
+  margin-bottom: 10px; /* On réduit l'espace ici */
   color: #ccc;
+}
+
+/* Style pour le nouveau texte */
+.matricule-info {
+  color: #FFD700; /* Jaune or */
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-bottom: 25px; /* On ajoute un plus grand espace avant le champ */
 }
 
 .login-box form input {
