@@ -32,6 +32,7 @@
   font-weight: 700;
   letter-spacing: 2px;
   margin: 0;
+  /* On retire la position absolue pour un meilleur alignement flexible */
 }
 
 .header-logo {
@@ -40,24 +41,17 @@
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.8);
   object-fit: cover;
+  display: block; /* S'assure que l'image n'a pas d'espace en dessous */
 }
 
-@media (max-width: 768px) {
-  .header-content {
-    padding: 0 10px;
-  }
-
-  .header-title {
-    font-size: 1.2rem;
-  }
-
-  .header-logo {
-    height: 40px;
-    width: 40px;
-  }
+/* Style pour le lien du logo */
+.logo-link {
+  transition: transform 0.3s ease;
 }
 
-/* ... styles précédents ... */
+.logo-link:hover {
+  transform: scale(1.1); /* Effet de zoom au survol */
+}
 
 .admin-button {
   display: flex;
@@ -77,4 +71,20 @@
 .admin-button:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0 10px;
+  }
+
+  .header-title {
+    /* Cache le titre sur mobile pour faire de la place */
+    display: none;
+  }
+
+  .header-logo {
+    height: 40px;
+    width: 40px;
+  }
 }
