@@ -1,0 +1,10 @@
+.manage-banner-container {
+  padding: 30px 2rem;
+  color: white;
+  text-align: center;
+}
+
+.manage-banner-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
