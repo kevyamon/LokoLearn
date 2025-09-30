@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Spinner from '../../components/common/Spinner';
 import './ManageBannerPage.css';
 
 const ManageBannerPage = () => {
@@ -19,7 +20,7 @@ const ManageBannerPage = () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload/banner`);
       const data = await res.json();
       setImages(data);
-    } catch (error) {
+    } catch (err) {
       setError("Erreur de récupération des images. Le serveur est peut-être en veille, réessayez dans une minute.");
     } finally {
       setPageLoading(false);
@@ -53,15 +54,16 @@ const ManageBannerPage = () => {
         body: formData,
       });
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.message);
       
       setMessage("Image ajoutée avec succès !");
       setFile(null);
-      document.getElementById('fileInput').value = null;
+      if (document.getElementById('fileInput')) {
+        document.getElementById('fileInput').value = null;
+      }
       fetchImages();
     } catch (err) {
-      setError(err.message || "Une erreur est survenue.");
+      setError(err.message || "Une erreur est survenue lors du téléversement.");
     } finally {
       setUploading(false);
     }
@@ -69,12 +71,15 @@ const ManageBannerPage = () => {
   
   const handleDelete = async (id) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cette image ?")) {
+      setError('');
+      setMessage('');
       try {
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload/banner/${id}`, {
           method: 'DELETE',
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
+        
         setMessage("Image supprimée avec succès !");
         fetchImages();
       } catch (err) {
@@ -96,17 +101,19 @@ const ManageBannerPage = () => {
       <div className="setting-card">
         <h3>Visibilité de la bannière</h3>
         <p>Activer ou masquer la bannière sur la page d'accueil.</p>
-        <label className="switch">
-          <input type="checkbox" checked={isBannerEnabled} onChange={handleToggleBanner} />
-          <span className="slider round"></span>
-        </label>
-        <span className="status">{isBannerEnabled ? 'Activée' : 'Désactivée'}</span>
+        <div className="toggle-wrapper">
+          <label className="switch">
+            <input type="checkbox" checked={isBannerEnabled} onChange={handleToggleBanner} />
+            <span className="slider round"></span>
+          </label>
+          <span className="status">{isBannerEnabled ? 'Activée' : 'Désactivée'}</span>
+        </div>
       </div>
 
       <div className="setting-card">
         <h3>Ajouter une nouvelle image</h3>
-        <form onSubmit={handleUpload} className="upload-form">
-          <input type="file" id="fileInput" onChange={handleFileChange} />
+        <form onSubmit={handleUpload}>
+          <input type="file" id="fileInput" onChange={handleFileChange} accept="image/*" />
           <button type="submit" disabled={uploading}>
             {uploading ? 'Téléversement...' : 'Téléverser'}
           </button>
@@ -118,14 +125,17 @@ const ManageBannerPage = () => {
       <div className="setting-card">
         <h3>Images actuelles de la bannière</h3>
         {pageLoading ? (
-          <p>Chargement des images...</p>
+          <div className="loading-container">
+            <Spinner />
+            <p>Chargement des images...</p>
+          </div>
         ) : (
           <div className="image-grid">
             {images.length > 0 ? (
               images.map(img => (
                 <div key={img._id} className="image-card">
                   <img src={img.imageUrl} alt="Bannière" />
-                  <button onClick={() => handleDelete(img._id)} className="delete-btn">×</button>
+                  <button onClick={() => handleDelete(img._id)} className="delete-btn" title="Supprimer l'image">×</button>
                 </div>
               ))
             ) : (

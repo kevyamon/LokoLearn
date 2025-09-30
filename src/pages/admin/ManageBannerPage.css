@@ -141,3 +141,15 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+/* ... tout le CSS précédent ... */
+
+/* Style pour le conteneur du chargement */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  color: #ccc;
+}
