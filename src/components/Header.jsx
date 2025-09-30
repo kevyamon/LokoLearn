@@ -1,13 +1,17 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import NavigateBackButton from './common/NavigateBackButton';
-import SearchButton from './search/SearchButton'; // 1. Importer
+import SearchButton from './search/SearchButton';
 import './Header.css';
 import logo from '../assets/logo.png';
 
 const Header = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+
+  // On lit les informations de l'utilisateur depuis le localStorage
+  const userInfoString = localStorage.getItem('userInfo');
+  const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
 
   return (
     <header className="app-header">
@@ -17,7 +21,11 @@ const Header = () => {
         </div>
         <h1 className="header-title">LokoLearn</h1>
         <div className="header-right">
-          <SearchButton /> {/* 2. Ajouter le bouton de recherche */}
+          <SearchButton />
+          {/* Affiche le bouton Admin seulement si l'utilisateur est connecté ET est admin */}
+          {userInfo && userInfo.isAdmin && (
+            <Link to="/admin" className="admin-button">Espace Admin</Link>
+          )}
           <img src={logo} alt="LokoLearn Logo" className="header-logo" /> 
         </div>
       </div>

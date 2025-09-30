@@ -1,7 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-
-// Pages
 import LandingPage from './pages/LandingPage';
 import ChoixFormationPage from './pages/ChoixFormationPage';
 import ChoixFilierePage from './pages/ChoixFilierePage';
@@ -11,8 +9,7 @@ import MatierePage from './pages/MatierePage';
 import LeconPage from './pages/LeconPage';
 import TpListPage from './pages/TpListPage';
 import TpDetailPage from './pages/TpDetailPage';
-
-// Composants communs
+import LoginPage from './pages/LoginPage';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTopButton from './components/common/ScrollToTopButton';
@@ -22,11 +19,12 @@ import SearchOverlay from './components/search/SearchOverlay';
 const PageWrapper = ({ children }) => {
   const location = useLocation();
   const backgroundClass = location.pathname === '/' ? 'landing-background' : 'app-background';
+  const noBreadcrumbs = location.pathname === '/' || location.pathname === '/login';
 
   return (
     <div className={backgroundClass}>
       <Header />
-      <Breadcrumbs />
+      {!noBreadcrumbs && <Breadcrumbs />}
       <main>
         {children}
       </main>
@@ -42,6 +40,7 @@ function App() {
       <PageWrapper>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/choix-formation" element={<ChoixFormationPage />} />
           <Route path="/choix-filiere" element={<ChoixFilierePage />} />
           <Route path="/choix-niveau" element={<ChoixNiveauPage />} />

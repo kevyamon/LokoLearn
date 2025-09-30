@@ -38,7 +38,7 @@ const LandingPage = () => {
     <div className={wrapperClass}>
       {isTransitioning && (
         <TransitionScreen 
-          onAnimationEnd={() => navigate('/choix-formation')} 
+          onAnimationEnd={() => navigate('/login')} 
         />
       )}
 
@@ -76,7 +76,6 @@ const LandingPage = () => {
           className="start-button"
         >
           <span role="img" aria-label="Graduate Cap" className="start-icon">🎓</span>
-          {/* Le texte du bouton est maintenant mis à jour */}
           Trouver un Cours
         </button>
         
