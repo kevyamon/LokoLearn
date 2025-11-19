@@ -1,0 +1,179 @@
+/* src/pages/student/StudentDashboard.css */
+
+.student-dashboard-container {
+  padding-top: 80px; /* Espace pour le header fixe */
+  padding-bottom: 60px;
+  min-height: 80vh;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* En-tête Profil */
+.student-header {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.student-avatar-container {
+  width: 100px;
+  height: 100px;
+  background: white;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border: 4px solid rgba(255, 255, 255, 0.3);
+}
+
+.student-avatar-icon {
+  font-size: 50px !important;
+  color: #3f51b5;
+}
+
+.student-welcome {
+  color: #ffffff;
+  margin-bottom: 8px;
+  font-size: 2rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.student-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+}
+
+/* Grille des Cartes */
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  width: 90%;
+  padding: 0 10px;
+}
+
+.student-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 35px 25px;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.student-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+}
+
+.student-card.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+}
+
+.student-card.disabled:hover {
+  transform: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon-bg {
+  background: #e8eaf6;
+  padding: 18px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.student-card:hover .card-icon-bg {
+  transform: scale(1.1) rotate(5deg);
+  background: #c5cae9;
+}
+
+.card-icon {
+  font-size: 36px !important;
+  color: #3f51b5;
+}
+
+.student-card h3 {
+  margin: 0 0 10px;
+  color: #1a1c23;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.student-card p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Bouton Déconnexion */
+.logout-container {
+  margin-top: 60px;
+  text-align: center;
+}
+
+.btn-logout {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 12px 35px;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: #fff;
+  transform: translateY(-2px);
+}
+
+/* Animation */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .student-header {
+    margin-bottom: 30px;
+  }
+  
+  .student-welcome {
+    font-size: 1.6rem;
+  }
+
+  .student-grid {
+    grid-template-columns: 1fr;
+    width: 95%;
+  }
+}
