@@ -1,7 +1,8 @@
+// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
-// Pages Étudiant
+// Pages Étudiant & Publiques
 import LandingPage from './pages/LandingPage';
 import ChoixFormationPage from './pages/ChoixFormationPage';
 import ChoixFilierePage from './pages/ChoixFilierePage';
@@ -37,10 +38,8 @@ const PageWrapper = ({ children }) => {
   const location = useLocation();
   const backgroundClass = location.pathname === '/' ? 'landing-background' : 'app-background';
   
-  // On cache le Header/Footer standard pour les pages Prof et Admin
+  // Pages spéciales sans layout standard
   const isSpecialPage = location.pathname.startsWith('/admin') || location.pathname.startsWith('/prof');
-  
-  // Gestion des fils d'ariane (Breadcrumbs)
   const noBreadcrumbs = location.pathname === '/' || location.pathname === '/login' || isSpecialPage || location.pathname === '/etudiant/dashboard';
 
   if (isSpecialPage) {
@@ -50,14 +49,16 @@ const PageWrapper = ({ children }) => {
   return (
     <div className={backgroundClass}>
       <Header />
-      {!noBreadcrumbs && <Breadcrumbs />}
-      <main>
-        {children}
-      </main>
       
-      {/* CORRECTION ICI : On cache le Footer global sur la page d'accueil ('/') */}
-      {/* La LandingPage possède déjà son propre footer stylisé */}
-      {location.pathname !== '/' && <Footer />}
+      {/* CORRECTION LAYOUT : On ajoute un padding-top au conteneur principal */}
+      <div style={{ paddingTop: '80px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        {!noBreadcrumbs && <Breadcrumbs />}
+        <main style={{ flex: 1, width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '20px', boxSizing: 'border-box' }}>
+          {children}
+        </main>
+      </div>
+
+      <Footer />
     </div>
   );
 };
@@ -68,11 +69,12 @@ function App() {
       <SearchOverlay />
       <PageWrapper>
         <Routes>
-          {/* Routes Publiques & Étudiant */}
+          {/* Routes Publiques */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/etudiant/dashboard" element={<StudentDashboard />} />
           
+          {/* Parcours Étudiant */}
           <Route path="/choix-formation" element={<ChoixFormationPage />} />
           <Route path="/choix-filiere" element={<ChoixFilierePage />} />
           <Route path="/choix-niveau" element={<ChoixNiveauPage />} />
@@ -82,7 +84,7 @@ function App() {
           <Route path="/tp/:annee/:matiereSlug" element={<TpListPage />} />
           <Route path="/tp/:annee/:matiereSlug/:tpId" element={<TpDetailPage />} />
 
-          {/* Routes Administrateur */}
+          {/* Routes Admin */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboardPage />} />
             <Route path="banner" element={<ManageBannerPage />} />
@@ -91,12 +93,10 @@ function App() {
           {/* Routes Professeur */}
           <Route path="/prof/login" element={<ProfLogin />} />
           <Route path="/prof/register" element={<ProfRegister />} />
-          
           <Route path="/prof" element={<ProfLayout />}>
             <Route path="dashboard" element={<ProfDashboard />} />
             <Route path="publier" element={<ProfPublier />} />
           </Route>
-
         </Routes>
       </PageWrapper>
       <ScrollToTopButton />

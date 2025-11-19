@@ -5,7 +5,7 @@ import { Menu } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import logo from '../assets/Logo.png';
 import './Header.css';
-import Sidebar from './Sidebar'; // <--- Import Sidebar
+import Sidebar from './Sidebar'; // Assure-toi que src/components/Sidebar.jsx existe bien !
 
 const Header = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -14,7 +14,7 @@ const Header = () => {
     <>
       <header className="header">
         <div className="header-container">
-          {/* Bouton Menu (Visible sur mobile surtout) */}
+          {/* Menu Burger */}
           <div className="menu-burger">
              <IconButton onClick={() => setSidebarOpen(true)} sx={{ color: '#333' }}>
                <Menu fontSize="large" />
@@ -26,14 +26,12 @@ const Header = () => {
             <span className="logo-text">LokoLearn</span>
           </Link>
 
-          {/* Navigation Desktop classique (optionnelle si tout est dans la sidebar) */}
-          <nav className="desktop-nav">
-             {/* Tu peux mettre des liens ici ou laisser vide pour ne garder que la sidebar */}
-          </nav>
+          {/* Espace vide pour équilibrer ou navigation desktop future */}
+          <div style={{ width: '48px' }} className="desktop-nav-placeholder"></div>
         </div>
       </header>
 
-      {/* La Sidebar est intégrée ici */}
+      {/* Integration de la Sidebar */}
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
     </>
   );
