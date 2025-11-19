@@ -1,17 +1,19 @@
+// src/pages/LoginPage.jsx
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSound } from '../hooks/useSound';
+// import { useSound } from '../hooks/useSound'; // Retiré pour Mission 0
 import './LoginPage.css';
 
 const LoginPage = () => {
   const [matricule, setMatricule] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { playClickSound } = useSound();
+  // const { playClickSound } = useSound(); // Retiré
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    playClickSound();
+    // playClickSound(); // Retiré
 
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/login`, {
