@@ -9,139 +9,142 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  /* Image de fond avec un fallback sombre */
-  background: url('../../assets/landing.png') no-repeat center center/cover;
+  overflow: hidden;
+  /* Fallback couleur si l'image ne charge pas */
   background-color: #1a1a1a; 
 }
 
-/* Overlay sombre pour lisibilité du texte */
-.landing-page::before {
-  content: '';
+/* L'image de fond est gérée via le style inline dans le JSX pour garantir le chargement via l'import JS */
+
+/* Overlay sombre dégradé pour la lisibilité */
+.landing-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6); /* Assombrit l'image de 60% */
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 100%);
   z-index: 1;
 }
 
-/* Conteneur du contenu centré (Effet Verre) */
+/* Conteneur du contenu centré */
 .content-container {
   position: relative;
   z-index: 2; /* Au-dessus de l'overlay */
-  max-width: 800px;
+  max-width: 900px;
   width: 90%;
-  padding: 3rem;
+  padding: 4rem 2rem;
   text-align: center;
   color: white;
   
-  /* Effet Glassmorphism */
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  
-  animation: slideUp 0.8s ease-out;
+  /* Animation d'apparition douce */
+  animation: fadeInUp 1s ease-out forwards;
 }
 
 /* Titre LOKO LEARN */
 .content-title {
-  font-size: 4rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
+  font-size: 5rem;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
   text-transform: uppercase;
-  letter-spacing: 5px;
-  line-height: 1.1;
-  background: linear-gradient(to right, #ffffff, #00aaff);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0px 4px 15px rgba(0, 170, 255, 0.3);
+  letter-spacing: 4px;
+  line-height: 1;
+  color: white;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.title-line {
-  display: block;
+.title-highlight {
+  color: #00aaff; /* Bleu électrique Loko */
+  position: relative;
+  display: inline-block;
 }
 
 /* Sous-titre */
 .content-subtitle {
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  margin-bottom: 3rem;
   color: #e0e0e0;
   font-weight: 300;
-}
-
-.content-author {
-  font-size: 1rem;
-  color: #aaa;
-  font-style: italic;
-  margin-bottom: 3rem;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Bouton d'action principal */
 .start-button {
-  background: linear-gradient(135deg, #007bff, #00c6ff);
+  background: linear-gradient(90deg, #007bff, #0056b3);
   color: white;
   border: none;
-  padding: 18px 45px;
-  font-size: 1.3rem;
+  padding: 20px 60px;
+  font-size: 1.4rem;
   font-weight: 700;
   border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 10px 30px rgba(0, 123, 255, 0.4);
   text-transform: uppercase;
   letter-spacing: 1px;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .start-button:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 10px 25px rgba(0, 123, 255, 0.6);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 123, 255, 0.6);
 }
 
-/* Slogan du bas */
-.slogan {
-  margin-top: 3rem;
-  font-size: 1.1rem;
-  color: #ffd700; /* Or */
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  opacity: 0.9;
+.start-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
+}
+
+.start-button:hover::after {
+  left: 100%;
+}
+
+/* Footer discret */
+.landing-footer {
+  margin-top: auto;
+  padding-bottom: 20px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  z-index: 2;
 }
 
 /* Animations */
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive Mobile */
 @media (max-width: 768px) {
   .content-title {
-    font-size: 2.5rem;
-    letter-spacing: 2px;
+    font-size: 3rem;
   }
   
   .content-subtitle {
     font-size: 1.1rem;
-  }
-
-  .content-container {
-    padding: 2rem 1.5rem;
-    width: 95%;
+    padding: 0 10px;
   }
 
   .start-button {
     width: 100%;
-    justify-content: center;
-    padding: 15px 20px;
-    font-size: 1.1rem;
+    padding: 18px 30px;
+    font-size: 1.2rem;
   }
 }
