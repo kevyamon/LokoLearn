@@ -1,44 +1,41 @@
-import React from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import NavigateBackButton from './common/NavigateBackButton';
-import SearchButton from './search/SearchButton';
+// src/components/Header.jsx
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Menu } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import logo from '../assets/Logo.png';
 import './Header.css';
-import logo from '../assets/logo.png';
+import Sidebar from './Sidebar'; // <--- Import Sidebar
 
 const Header = () => {
-  const location = useLocation();
-  const isHomePage = location.pathname === '/';
-  const isLoginPage = location.pathname === '/login';
-
-  const userInfoString = localStorage.getItem('userInfo');
-  const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <header className="app-header">
-      <div className="header-content">
-        <div className="header-left">
-          {/* On cache le bouton retour aussi sur la page de login */}
-          {!isHomePage && !isLoginPage && <NavigateBackButton />}
-        </div>
-        <h1 className="header-title">LokoLearn</h1>
-        <div className="header-right">
-          {/* On cache la recherche sur la page de login et l'accueil */}
-          {!isHomePage && !isLoginPage && <SearchButton />}
-          
-          {userInfo && userInfo.isAdmin && !isHomePage && !isLoginPage && (
-            <Link to="/admin" className="admin-button">
-              <span role="img" aria-label="Admin">👑</span>
-              Administration
-            </Link>
-          )}
+    <>
+      <header className="header">
+        <div className="header-container">
+          {/* Bouton Menu (Visible sur mobile surtout) */}
+          <div className="menu-burger">
+             <IconButton onClick={() => setSidebarOpen(true)} sx={{ color: '#333' }}>
+               <Menu fontSize="large" />
+             </IconButton>
+          </div>
 
-          {/* On transforme le logo en lien */}
           <Link to="/" className="logo-link">
-            <img src={logo} alt="LokoLearn Logo" className="header-logo" />
+            <img src={logo} alt="LokoLearn Logo" className="logo" />
+            <span className="logo-text">LokoLearn</span>
           </Link>
+
+          {/* Navigation Desktop classique (optionnelle si tout est dans la sidebar) */}
+          <nav className="desktop-nav">
+             {/* Tu peux mettre des liens ici ou laisser vide pour ne garder que la sidebar */}
+          </nav>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* La Sidebar est intégrée ici */}
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+    </>
   );
 };
 
