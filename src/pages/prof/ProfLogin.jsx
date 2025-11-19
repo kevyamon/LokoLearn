@@ -17,20 +17,22 @@ const ProfLogin = () => {
     setLoading(true);
 
     try {
-      // Simulation temporaire pour le dev si le backend n'est pas encore prêt pour l'email
-      if (formData.email && formData.password) {
-         const fakeToken = "simulated_token_pending_backend_update";
-         localStorage.setItem('profInfo', JSON.stringify({ 
-             name: 'Professeur (Mode Dev)', 
-             email: formData.email,
-             token: fakeToken 
-         }));
-         navigate('/prof/dashboard');
-      }
+      // APPEL API RÉEL
+      const { data } = await api.post('/api/users/prof/login', { 
+        email: formData.email, 
+        password: formData.password 
+      });
+
+      // Si on est là, c'est que c'est bon (200 OK)
+      // On enregistre les VRAIES infos du prof et le VRAI token
+      localStorage.setItem('profInfo', JSON.stringify(data));
+      
+      // Redirection vers le dashboard (qui va maintenant charger les vraies stats)
+      navigate('/prof/dashboard');
 
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || 'Erreur de connexion au serveur');
+      setError(err.response?.data?.message || 'Email ou mot de passe incorrect');
     } finally {
       setLoading(false);
     }
@@ -70,21 +72,18 @@ const ProfLogin = () => {
             {loading ? 'Connexion...' : 'Se connecter'}
           </Button>
         </form>
-
-        <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <Link to="/prof/register" style={{ textDecoration: 'none', color: '#3f51b5', fontSize: '0.9rem' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Link to="/prof/register" style={{ textDecoration: 'none', color: '#3f51b5', fontSize: '0.9rem' }}>
             Nouveau professeur ? Créer un compte
-          </Link>
-          
-          {/* BOUTON RETOUR */}
-          <Button 
-            startIcon={<ArrowBack />} 
-            onClick={() => navigate('/')}
-            size="small"
-            sx={{ color: 'text.secondary', textTransform: 'none', alignSelf: 'center', mt: 1 }}
-          >
-            Retour à l'accueil
-          </Button>
+            </Link>
+            <Button 
+                startIcon={<ArrowBack />} 
+                onClick={() => navigate('/')}
+                size="small"
+                sx={{ color: 'text.secondary', textTransform: 'none', alignSelf: 'center', mt: 1 }}
+            >
+                Retour à l'accueil
+            </Button>
         </Box>
       </Paper>
     </Box>

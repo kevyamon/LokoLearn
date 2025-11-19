@@ -1,7 +1,7 @@
 // kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/admin/AdminDashboardPage.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Logout } from '@mui/icons-material';
+import { Logout, VpnKey } from '@mui/icons-material'; // Ajout de l'icône clé
 import './AdminDashboardPage.css';
 
 const AdminDashboardPage = () => {
@@ -23,6 +23,14 @@ const AdminDashboardPage = () => {
         <Link to="/admin/banner" className="admin-card">
           <h3>Gérer la Bannière</h3>
           <p>Ajouter, modifier ou supprimer les images de la bannière d'accueil.</p>
+        </Link>
+
+        {/* NOUVELLE CARTE : GESTION CODE PROF */}
+        <Link to="/admin/settings" className="admin-card" style={{ borderLeft: '4px solid #FFD700' }}>
+          <h3 style={{ color: '#FFD700', display: 'flex', alignItems: 'center', gap: '10px' }}>
+             <VpnKey /> Code Professeur
+          </h3>
+          <p>Modifier le code secret requis pour l'inscription des enseignants.</p>
         </Link>
 
         {/* Cartes Futures (Désactivées) */}

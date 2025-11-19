@@ -19,6 +19,7 @@ import TpDetailPage from './pages/TpDetailPage';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import ManageBannerPage from './pages/admin/ManageBannerPage';
+import AdminSettingsPage from './pages/admin/AdminSettingsPage'; // NOUVEL IMPORT
 import ProfLayout from './pages/prof/ProfLayout';
 import ProfLogin from './pages/prof/ProfLogin';
 import ProfRegister from './pages/prof/ProfRegister';
@@ -33,7 +34,6 @@ import ScrollToTopButton from './components/common/ScrollToTopButton';
 import SearchOverlay from './components/search/SearchOverlay';
 
 // --- LAYOUT PRINCIPAL (Contient Header + Sidebar + Footer Global) ---
-// Ce layout ne sera utilisé QUE pour les pages internes, pas l'accueil.
 const MainLayout = () => {
   return (
     <div className="app-background">
@@ -59,13 +59,12 @@ function App() {
       <Routes>
         
         {/* 1. LANDING PAGE : TOTALEMENT ISOLÉE */}
-        {/* Pas de Header, Pas de Sidebar, Pas de Footer Global = Pas de bugs tactiles */}
         <Route path="/" element={<LandingPage />} />
 
-        {/* 2. LOGIN : ISOLÉ AUSSI (Optionnel, pour le style) */}
+        {/* 2. LOGIN : ISOLÉ AUSSI */}
         <Route path="/login" element={
           <div className="app-background">
-            <Header /> {/* On garde le header pour le retour accueil */}
+            <Header />
             <div style={{ paddingTop: '80px' }}>
                 <LoginPage />
             </div>
@@ -90,6 +89,7 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="banner" element={<ManageBannerPage />} />
+          <Route path="settings" element={<AdminSettingsPage />} /> {/* NOUVELLE ROUTE */}
         </Route>
 
         {/* 5. SECTION PROF */}
@@ -97,8 +97,8 @@ function App() {
         <Route path="/prof/register" element={<ProfRegister />} />
         <Route path="/prof" element={<ProfLayout />}>
           <Route path="dashboard" element={<ProfDashboard />} />
+          <Route path="cours" element={<ProfDashboard />} /> {/* Placeholder */}
           <Route path="publier" element={<ProfPublier />} />
-          <Route path="cours" element={<ProfDashboard />} />
         </Route>
 
       </Routes>
