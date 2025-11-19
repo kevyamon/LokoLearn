@@ -1,8 +1,14 @@
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/admin/ManageBannerPage.jsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { IconButton } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 import Spinner from '../../components/common/Spinner';
+import api from '../../services/api'; // On utilise notre service API centralisé
 import './ManageBannerPage.css';
 
 const ManageBannerPage = () => {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [images, setImages] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
@@ -14,14 +20,16 @@ const ManageBannerPage = () => {
     localStorage.getItem('bannerVisible') !== 'false'
   );
 
+  // RÉCUPÉRATION DES IMAGES
   const fetchImages = async () => {
     setPageLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload/banner`);
-      const data = await res.json();
+      // Utilisation de 'api' au lieu de 'fetch' (Gère l'URL et les erreurs)
+      const { data } = await api.get('/api/upload/banner');
       setImages(data);
     } catch (err) {
-      setError("Erreur de récupération des images. Le serveur est peut-être en veille, réessayez dans une minute.");
+      console.error(err);
+      setError("Impossible de charger les images. Vérifiez votre connexion.");
     } finally {
       setPageLoading(false);
     }
@@ -35,6 +43,7 @@ const ManageBannerPage = () => {
     setFile(e.target.files[0]);
   };
 
+  // UPLOAD IMAGE
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!file) {
@@ -49,41 +58,40 @@ const ManageBannerPage = () => {
     formData.append('image', file);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload/banner`, {
-        method: 'POST',
-        body: formData,
+      // Utilisation de 'api.post' (Envoie le Token Admin automatiquement)
+      await api.post('/api/upload/banner', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
       
       setMessage("Image ajoutée avec succès !");
       setFile(null);
+      // Reset du champ file
       if (document.getElementById('fileInput')) {
         document.getElementById('fileInput').value = null;
       }
-      fetchImages();
+      fetchImages(); // On rafraîchit la liste
     } catch (err) {
-      setError(err.message || "Une erreur est survenue lors du téléversement.");
+      console.error(err);
+      setError(err.response?.data?.message || "Erreur lors du téléversement.");
     } finally {
       setUploading(false);
     }
   };
   
+  // SUPPRESSION IMAGE
   const handleDelete = async (id) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cette image ?")) {
       setError('');
       setMessage('');
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/upload/banner/${id}`, {
-          method: 'DELETE',
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message);
+        // Utilisation de 'api.delete' (Envoie le Token Admin automatiquement)
+        await api.delete(`/api/upload/banner/${id}`);
         
         setMessage("Image supprimée avec succès !");
         fetchImages();
       } catch (err) {
-        setError(err.message || "Erreur lors de la suppression.");
+        console.error(err);
+        setError(err.response?.data?.message || "Erreur lors de la suppression.");
       }
     }
   };
@@ -96,6 +104,17 @@ const ManageBannerPage = () => {
 
   return (
     <div className="manage-banner-container">
+      {/* BOUTON RETOUR */}
+      <div style={{ marginBottom: '20px' }}>
+        <button 
+            onClick={() => navigate('/admin')} 
+            className="back-button" // Utilise le style existant
+            style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'transparent', border: '1px solid white' }}
+        >
+            <ArrowBack fontSize="small" /> Retour au Dashboard
+        </button>
+      </div>
+
       <h1>Gestion de la Bannière</h1>
 
       <div className="setting-card">
