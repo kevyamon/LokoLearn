@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api'; // On importe notre service API unifié
 import './LoginPage.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   
-  // États
-  const [step, setStep] = useState(1); // 1: Matricule, 2: Mot de passe
-  const [mode, setMode] = useState('login'); // 'login' ou 'register'
+  const [step, setStep] = useState(1); 
+  const [mode, setMode] = useState('login'); 
   const [matricule, setMatricule] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -20,15 +20,9 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/check`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ matricule }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.message || "Erreur de vérification");
+      // Avec api.js, on ne met que la fin de l'URL. 
+      // Axios gère le domaine (http://.../api/...) automatiquement.
+      const { data } = await api.post('/api/users/check', { matricule });
 
       if (data.exists) {
         setMode('login');
@@ -38,7 +32,9 @@ const LoginPage = () => {
       setStep(2);
 
     } catch (err) {
-      setError(err.message);
+      console.error(err);
+      // Axios renvoie l'erreur dans err.response.data.message
+      setError(err.response?.data?.message || "Erreur de connexion au serveur");
     } finally {
       setLoading(false);
     }
@@ -53,21 +49,15 @@ const LoginPage = () => {
     const endpoint = mode === 'login' ? '/api/users/login' : '/api/users/register';
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ matricule, password }),
-      });
+      const { data } = await api.post(endpoint, { matricule, password });
 
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.message || "Erreur d'authentification");
-
+      // Succès : Axios ne lance pas d'exception si le statut est 200/201
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate('/etudiant/dashboard');
 
     } catch (err) {
-      setError(err.message);
+      console.error(err);
+      setError(err.response?.data?.message || "Erreur d'authentification");
     } finally {
       setLoading(false);
     }
@@ -80,7 +70,6 @@ const LoginPage = () => {
         
         {step === 1 && (
           <>
-            {/* Texte Strict demandé */}
             <p className="matricule-info">
               Entrez votre matricule LOKO, c'est le matricule qui est sur votre carte étudiant.
             </p>
@@ -93,7 +82,7 @@ const LoginPage = () => {
                 onChange={(e) => setMatricule(e.target.value.toUpperCase())}
                 required
                 disabled={loading}
-                style={{ textAlign: 'center' }} // Petit bonus esthétique pour le centrer
+                style={{ textAlign: 'center' }} 
               />
               {error && <p className="error-message">{error}</p>}
               <button type="submit" disabled={loading}>
