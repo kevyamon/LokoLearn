@@ -1,180 +1,147 @@
-/* --- Styles pour le contenu SOUS la bannière (quand elle est visible) --- */
-.with-banner .content-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-  text-align: center;
-  color: white;
-}
+/* src/pages/LandingPage.css */
 
-/* --- Styles pour le contenu QUAND LA BANNIÈRE EST MASQUÉE --- */
-.no-banner .content-container {
+/* Conteneur Principal : Plein écran, Image de fond fixe */
+.landing-page {
+  min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 70px); /* Prend toute la hauteur disponible sous le header */
-  padding: 2rem;
-  color: white;
-  text-align: center;
+  position: relative;
+  /* Image de fond avec un fallback sombre */
+  background: url('../../assets/landing.png') no-repeat center center/cover;
+  background-color: #1a1a1a; 
 }
 
-/* --- Le reste du CSS est commun aux deux états --- */
-
-.content-title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+/* Overlay sombre pour lisibilité du texte */
+.landing-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Assombrit l'image de 60% */
+  z-index: 1;
 }
 
-/* ... tout le reste du fichier LandingPage.css reste identique ... */
-
-/* --- Conteneur du contenu sous la bannière --- */
+/* Conteneur du contenu centré (Effet Verre) */
 .content-container {
-  max-width: 900px;
-  /* RÈGLE DE CENTRAGE ESSENTIELLE */
-  margin: 0 auto;
-  padding: 4rem 2rem;
+  position: relative;
+  z-index: 2; /* Au-dessus de l'overlay */
+  max-width: 800px;
+  width: 90%;
+  padding: 3rem;
   text-align: center;
-  /* Le texte doit être BLANC pour être visible sur le fond landing.png */
-  color: white; 
+  color: white;
+  
+  /* Effet Glassmorphism */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  
+  animation: slideUp 0.8s ease-out;
 }
 
-/* --- Le titre du contenu --- */
+/* Titre LOKO LEARN */
 .content-title {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 4rem;
+  font-weight: 800;
   margin-bottom: 1rem;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  line-height: 1.1;
+  background: linear-gradient(to right, #ffffff, #00aaff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0px 4px 15px rgba(0, 170, 255, 0.3);
 }
 
 .title-line {
-  display: inline-flex;
+  display: block;
 }
 
-/* --- ANIMATION DES LETTRES RESTAURÉE --- */
-@keyframes fadeInLetter {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.content-title span span {
-  opacity: 0;
-  animation: fadeInLetter 0.5s forwards;
-}
-/* --- FIN ANIMATION TITRE --- */
-
-
+/* Sous-titre */
 .content-subtitle {
-  font-size: 1.3rem;
-  margin-bottom: 2rem;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: #e0e0e0;
   font-weight: 300;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
 }
 
 .content-author {
-  margin-bottom: 2.5rem;
+  font-size: 1rem;
+  color: #aaa;
   font-style: italic;
-  font-size: 1.1rem;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+  margin-bottom: 3rem;
 }
 
+/* Bouton d'action principal */
 .start-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px 30px;
-  font-size: 1.2rem;
-  font-weight: 600;
+  background: linear-gradient(135deg, #007bff, #00c6ff);
   color: white;
-  background: linear-gradient(90deg, #007BFF, #00C6FF);
   border: none;
+  padding: 18px 45px;
+  font-size: 1.3rem;
+  font-weight: 700;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
-  /* --- ANIMATION DU BOUTON RESTAURÉE --- */
-  animation: float 3s ease-in-out infinite;
-}
-
-.start-icon {
-  font-size: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .start-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.6);
-  animation-play-state: paused;
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0, 123, 255, 0.6);
 }
 
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0px); }
-}
-/* --- FIN ANIMATION BOUTON --- */
-
-
-/* --- STYLE DU SLOGAN RESTAURÉ --- */
+/* Slogan du bas */
 .slogan {
   margin-top: 3rem;
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #FFD700;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 1);
-  animation: glow 2s ease-in-out infinite alternate;
+  font-size: 1.1rem;
+  color: #ffd700; /* Or */
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  opacity: 0.9;
 }
 
-@keyframes glow {
-  from {
-    text-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700, 2px 2px 8px rgba(0, 0, 0, 1);
-  }
-  to {
-    text-shadow: 0 0 20px #ffae00, 0 0 30px #ffae00, 2px 2px 8px rgba(0, 0, 0, 1);
-  }
+/* Animations */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-/* --- FIN STYLE SLOGAN --- */
 
-
-/* --- Styles pour Mobile --- */
+/* Responsive Mobile */
 @media (max-width: 768px) {
-  .content-container {
-    padding: 2.5rem 1rem;
-  }
-
   .content-title {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
   }
-
-  .title-line {
-    display: block;
-    width: 100%;
-  }
-
+  
   .content-subtitle {
     font-size: 1.1rem;
   }
 
-  .start-button {
-    padding: 12px 25px;
-    font-size: 1rem;
+  .content-container {
+    padding: 2rem 1.5rem;
+    width: 95%;
   }
-  
-  .slogan {
+
+  .start-button {
+    width: 100%;
+    justify-content: center;
+    padding: 15px 20px;
     font-size: 1.1rem;
-    margin-top: 2rem;
   }
 }
