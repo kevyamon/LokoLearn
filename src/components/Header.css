@@ -1,7 +1,9 @@
+/* kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/components/Header.css */
+
 .app-header {
   width: 100%;
   padding: 10px 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.8); /* Fond un peu plus sombre pour la lisibilité */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: white;
@@ -9,7 +11,7 @@
   top: 0;
   left: 0;
   z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .header-content {
@@ -21,18 +23,18 @@
   padding: 0 20px;
 }
 
-.header-left, .header-right {
+/* --- STYLE DU LOGO + LIEN --- */
+.logo-link {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px; /* Espace entre logo et texte */
+  text-decoration: none; /* ENLEVE LE SOULIGNEMENT DU LIEN */
+  color: white; /* FORCE LA COULEUR BLANCHE (pas de bleu/violet) */
+  transition: transform 0.3s ease;
 }
 
-.header-title {
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  margin: 0;
-  /* On retire la position absolue pour un meilleur alignement flexible */
+.logo-link:hover {
+  transform: scale(1.05);
 }
 
 .header-logo {
@@ -41,50 +43,30 @@
   border-radius: 50%;
   border: 2px solid rgba(255, 255, 255, 0.8);
   object-fit: cover;
-  display: block; /* S'assure que l'image n'a pas d'espace en dessous */
+  display: block;
 }
 
-/* Style pour le lien du logo */
-.logo-link {
-  transition: transform 0.3s ease;
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: white;
+  text-transform: uppercase;
 }
 
-.logo-link:hover {
-  transform: scale(1.1); /* Effet de zoom au survol */
-}
-
-.admin-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(45deg, #ffd700, #ffae00);
-  color: #1a1a1a;
-  padding: 8px 15px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  border: none;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-.admin-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.6);
-}
-
+/* --- RESPONSIVE (MOBILE) --- */
 @media (max-width: 768px) {
   .header-content {
-    padding: 0 10px;
-  }
-
-  .header-title {
-    /* Cache le titre sur mobile pour faire de la place */
-    display: none;
+    padding: 0 15px;
   }
 
   .header-logo {
     height: 40px;
     width: 40px;
+  }
+
+  /* ICI : On cache le texte sur mobile pour ne pas avoir le "petit lien" en dessous */
+  .logo-text {
+    display: none;
   }
 }

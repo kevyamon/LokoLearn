@@ -2,7 +2,9 @@
 
 /* Conteneur Principal : Plein écran */
 .landing-page {
+  /* Utilisation de dvh (Dynamic Viewport Height) pour fixer le souci des barres mobiles */
   min-height: 100vh;
+  min-height: 100dvh; 
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -11,38 +13,34 @@
   position: relative;
   overflow: hidden;
   
-  /* RÉPARATION : On utilise un dégradé professionnel au lieu de l'image cassée */
-  /* Un cercle rouge foncé au centre qui se fond vers du noir sur les bords */
+  /* REPARATION FOND : On utilise un dégradé CSS au lieu d'une image qui zoome mal */
+  /* Rouge foncé LOKO vers Noir */
   background: radial-gradient(circle at center, #8B0000 0%, #1a0000 100%); 
 }
 
-/* Overlay pour donner de la texture (optionnel, on garde une opacité faible) */
+/* Overlay pour texture (optionnel) */
 .landing-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  /* On peut ajouter une texture ici si besoin, ou laisser transparent */
-  background-color: rgba(0, 0, 0, 0.2); 
+  background-color: rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
-/* Conteneur du contenu centré */
+/* Conteneur du contenu */
 .content-container {
   position: relative;
-  z-index: 2; /* Au-dessus de l'overlay */
+  z-index: 2;
   max-width: 900px;
   width: 90%;
   padding: 4rem 2rem;
   text-align: center;
   color: white;
-  
-  /* Animation d'apparition douce */
   animation: fadeInUp 1s ease-out forwards;
 }
 
-/* Titre LOKO LEARN */
 .content-title {
   font-size: 5rem;
   font-weight: 900;
@@ -55,12 +53,11 @@
 }
 
 .title-highlight {
-  color: #FFD700; /* Jaune Or (Couleur Loko) */
+  color: #FFD700; /* Jaune Or */
   position: relative;
   display: inline-block;
 }
 
-/* Sous-titre */
 .content-subtitle {
   font-size: 1.5rem;
   margin-bottom: 3rem;
@@ -72,9 +69,8 @@
   margin-right: auto;
 }
 
-/* Bouton d'action principal */
 .start-button {
-  background: linear-gradient(90deg, #d32f2f, #b71c1c); /* Rouge Loko */
+  background: linear-gradient(90deg, #d32f2f, #b71c1c);
   color: white;
   border: none;
   padding: 20px 60px;
@@ -96,22 +92,7 @@
   box-shadow: 0 15px 40px rgba(211, 47, 47, 0.6);
 }
 
-.start-button::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: 0.5s;
-}
-
-.start-button:hover::after {
-  left: 100%;
-}
-
-/* Footer discret (celui de la landing page uniquement) */
+/* Footer Landing */
 .landing-footer {
   margin-top: auto;
   padding-bottom: 20px;
@@ -120,32 +101,22 @@
   z-index: 2;
 }
 
-/* Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.dev-credits {
+  transition: color 0.3s ease;
+}
+.dev-credits:active {
+  color: #FFD700; /* Feedback visuel quand on appuie dessus */
 }
 
-/* Responsive Mobile */
-@media (max-width: 768px) {
-  .content-title {
-    font-size: 3rem;
-  }
-  
-  .content-subtitle {
-    font-size: 1.1rem;
-    padding: 0 10px;
-  }
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  .start-button {
-    width: 100%;
-    padding: 18px 30px;
-    font-size: 1.2rem;
-  }
+/* Mobile */
+@media (max-width: 768px) {
+  .content-title { font-size: 3rem; }
+  .content-subtitle { font-size: 1.1rem; padding: 0 10px; }
+  .start-button { width: 100%; padding: 18px 30px; font-size: 1.2rem; }
 }

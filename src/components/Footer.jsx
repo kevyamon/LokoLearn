@@ -1,18 +1,15 @@
-// src/components/Footer.jsx
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/components/Footer.jsx
 import React, { useState, useRef } from 'react';
 import './Footer.css';
-import AdminAuthModal from './admin/adminAuthModal'; // <--- Import du Modal
+import AdminAuthModal from './admin/adminAuthModal';
 
 const Footer = () => {
   const [adminModalOpen, setAdminModalOpen] = useState(false);
   const timerRef = useRef(null);
 
-  // Déclencheur du "God Mode"
   const handlePressStart = () => {
     timerRef.current = setTimeout(() => {
-      // Si on maintient 3 secondes, bingo !
       setAdminModalOpen(true);
-      // Petit retour haptique si sur mobile (vibration)
       if (navigator.vibrate) navigator.vibrate(200);
     }, 3000);
   };
@@ -25,27 +22,26 @@ const Footer = () => {
 
   return (
     <>
-      <footer className="footer">
+      {/* CORRECTION : 'app-footer' pour correspondre au CSS */}
+      <footer className="app-footer">
         <div className="footer-content">
           <p>
             &copy; {new Date().getFullYear()} LokoLearn. Tous droits réservés.
           </p>
           <p 
             className="footer-credits"
-            // Les événements magiques
             onMouseDown={handlePressStart}
             onMouseUp={handlePressEnd}
             onMouseLeave={handlePressEnd}
             onTouchStart={handlePressStart}
             onTouchEnd={handlePressEnd}
-            style={{ cursor: 'default', userSelect: 'none' }} // Pour ne pas sélectionner le texte
+            style={{ cursor: 'default', userSelect: 'none' }}
           >
             Une initiative de Kevin Amon
           </p>
         </div>
       </footer>
 
-      {/* Le Modal Secret */}
       <AdminAuthModal 
         open={adminModalOpen} 
         onClose={() => setAdminModalOpen(false)} 

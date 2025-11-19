@@ -1,9 +1,9 @@
-// src/pages/prof/ProfLogin.jsx
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/prof/ProfLogin.jsx
 import React, { useState } from 'react';
 import { Box, Paper, Typography, TextField, Button, Alert, InputAdornment } from '@mui/material';
-import { Email, Lock, School } from '@mui/icons-material';
+import { Email, Lock, School, ArrowBack } from '@mui/icons-material';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '../../services/api'; // On utilise notre nouvelle instance API
+import api from '../../services/api';
 
 const ProfLogin = () => {
   const navigate = useNavigate();
@@ -17,37 +17,8 @@ const ProfLogin = () => {
     setLoading(true);
 
     try {
-      // APPEL API RÉEL VERS LE BACKEND
-      // Note: On utilise la même route que les étudiants car User est polymorphe
-      // Mais on pourrait avoir une route dédiée si besoin. Ici on tente /login générique
-      // Si ton backend a une route spécifique prof, adapte ici. 
-      // D'après ton userController, c'est /api/users/login (loginStudent) qui gère tout par matricule normalement,
-      // MAIS pour les profs c'est par email.
-      
-      // Correction stratégique : Comme ton backend actuel (userController) semble très axé "Matricule",
-      // nous allons simuler une connexion directe ou adapter le backend plus tard.
-      // Pour l'instant, utilisons une route login standard, ou assumons que tu vas ajouter le login par email au backend.
-      
-      // HYPOTHÈSE : Si tu n'as pas encore codé le login par Email côté backend, 
-      // je vais utiliser une astuce : on envoie l'email comme "matricule" si le backend le permet,
-      // SINON, je te mets ici le code prêt pour quand le backend aura loginProf.
-      
-      // Pour que ça marche TOUT DE SUITE avec ton backend actuel qui attend un matricule :
-      // Je vais laisser le mock temporairement MAIS connecté à la structure
-      // ATTENTION : Il faudra implémenter loginByEmail côté backend.
-      
-      // CODE PROVISOIRE LE TEMPS QUE TU METTES A JOUR LE BACKEND POUR L'EMAIL :
-       /*
-      const { data } = await api.post('/api/users/login-prof', { 
-        email: formData.email, 
-        password: formData.password 
-      });
-      */
-
-      // Pour l'instant, je simule un succès pour débloquer l'affichage, 
-      // car ton backend actuel ne semble gérer que les matricules étudiants (5 chiffres-M1).
+      // Simulation temporaire pour le dev si le backend n'est pas encore prêt pour l'email
       if (formData.email && formData.password) {
-         // Simulation d'un token pour que le dashboard ne plante pas
          const fakeToken = "simulated_token_pending_backend_update";
          localStorage.setItem('profInfo', JSON.stringify({ 
              name: 'Professeur (Mode Dev)', 
@@ -99,9 +70,22 @@ const ProfLogin = () => {
             {loading ? 'Connexion...' : 'Se connecter'}
           </Button>
         </form>
-        <Link to="/prof/register" style={{ textDecoration: 'none', color: '#3f51b5', fontSize: '0.9rem' }}>
-          Nouveau professeur ? Créer un compte
-        </Link>
+
+        <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Link to="/prof/register" style={{ textDecoration: 'none', color: '#3f51b5', fontSize: '0.9rem' }}>
+            Nouveau professeur ? Créer un compte
+          </Link>
+          
+          {/* BOUTON RETOUR */}
+          <Button 
+            startIcon={<ArrowBack />} 
+            onClick={() => navigate('/')}
+            size="small"
+            sx={{ color: 'text.secondary', textTransform: 'none', alignSelf: 'center', mt: 1 }}
+          >
+            Retour à l'accueil
+          </Button>
+        </Box>
       </Paper>
     </Box>
   );

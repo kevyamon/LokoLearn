@@ -1,7 +1,7 @@
-// src/pages/prof/ProfRegister.jsx
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/prof/ProfRegister.jsx
 import React, { useState } from 'react';
 import { Box, Paper, Typography, TextField, Button, Alert, InputAdornment } from '@mui/material';
-import { Person, Email, Lock, VpnKey } from '@mui/icons-material';
+import { Person, Email, Lock, VpnKey, ArrowBack } from '@mui/icons-material';
 import { useNavigate, Link } from 'react-router-dom';
 
 const ProfRegister = () => {
@@ -11,7 +11,7 @@ const ProfRegister = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Validation avec le Backend
+    // Validation simple
     if (formData.code !== 'LOKO-PROF-2024') { // Code temporaire pour test
       setError("Code établissement invalide. Contactez l'administration.");
       return;
@@ -54,9 +54,22 @@ const ProfRegister = () => {
             Valider mon compte
           </Button>
         </form>
-        <Link to="/prof/login" style={{ textDecoration: 'none', color: '#3f51b5' }}>
-          Déjà un compte ? Se connecter
-        </Link>
+
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Link to="/prof/login" style={{ textDecoration: 'none', color: '#3f51b5' }}>
+            Déjà un compte ? Se connecter
+          </Link>
+
+          {/* BOUTON RETOUR */}
+          <Button 
+            startIcon={<ArrowBack />} 
+            onClick={() => navigate('/')}
+            size="small"
+            sx={{ color: 'text.secondary', textTransform: 'none', alignSelf: 'center', mt: 1 }}
+          >
+            Retour à l'accueil
+          </Button>
+        </Box>
       </Paper>
     </Box>
   );

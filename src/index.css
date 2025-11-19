@@ -1,4 +1,5 @@
-/* --- Définition des variables de couleur --- */
+/* kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/index.css */
+
 :root[data-theme='dark'] {
   --text-color: #ffffff;
   --text-color-secondary: #ccc;
@@ -19,35 +20,35 @@
   --content-section-bg: rgba(255, 255, 255, 0.5);
 }
 
-/* On applique les variables */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  /* On ne met la transition que sur ce qui change */
+}
+
+/* SOLUTION CRITIQUE POUR MOBILE : Empêche le scroll horizontal causé par la Sidebar cachée */
+html, body {
+  width: 100%;
+  overflow-x: hidden; 
+  overscroll-behavior-y: none; /* Empêche le "bounce" sur mobile */
 }
 
 body {
   line-height: 1.6;
+  background-color: #242424;
 }
 
-/* --- ON RESTAURE LES FONDS D'ÉCRAN --- */
-.app-background, .landing-background {
+/* Gestion des fonds d'écran */
+.app-background {
   min-height: 100vh;
   width: 100%;
+  /* On retire 'fixed' qui bug sur mobile et on utilise une couleur de fond solide en secours */
+  background-image: url('./assets/background.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: scroll; /* Plus stable sur mobile que fixed */
 }
 
-.app-background {
-  background-image: url('./assets/background.png');
-  background-color: #242424; /* Fallback si l'image ne charge pas */
-}
-
-.landing-background {
-  background-image: url('./assets/landing.png');
-  background-color: #242424; /* Fallback si l'image ne charge pas */
-}
+/* La landing page gère son propre fond dans LandingPage.css */
