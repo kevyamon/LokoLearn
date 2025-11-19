@@ -1,4 +1,4 @@
-// src/App.jsx
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
@@ -36,21 +36,32 @@ import SearchOverlay from './components/search/SearchOverlay';
 
 const PageWrapper = ({ children }) => {
   const location = useLocation();
-  const backgroundClass = location.pathname === '/' ? 'landing-background' : 'app-background';
   
-  // Pages spéciales sans layout standard
+  // DÉTECTION : Est-ce qu'on est sur la page d'accueil ?
+  const isLandingPage = location.pathname === '/';
+  
+  // Pages spéciales sans layout standard (Admin, Prof)
   const isSpecialPage = location.pathname.startsWith('/admin') || location.pathname.startsWith('/prof');
-  const noBreadcrumbs = location.pathname === '/' || location.pathname === '/login' || isSpecialPage || location.pathname === '/etudiant/dashboard';
+  
+  // On masque le fil d'ariane sur certaines pages
+  const noBreadcrumbs = isLandingPage || location.pathname === '/login' || isSpecialPage || location.pathname === '/etudiant/dashboard';
 
+  // CAS 1 : Routes Admin/Prof (Layouts dédiés gérés par leurs composants parents)
   if (isSpecialPage) {
     return <>{children}</>;
   }
 
+  // CAS 2 : Landing Page (Plein écran, pas de Header/Footer global pour éviter les doublons/conflits)
+  if (isLandingPage) {
+    return <>{children}</>;
+  }
+
+  // CAS 3 : Application Standard (Étudiant/Login) avec Header et Footer
   return (
-    <div className={backgroundClass}>
+    <div className="app-background">
       <Header />
       
-      {/* CORRECTION LAYOUT : On ajoute un padding-top au conteneur principal */}
+      {/* Le padding-top n'est appliqué que ici, pas sur la Landing Page */}
       <div style={{ paddingTop: '80px', flex: 1, display: 'flex', flexDirection: 'column' }}>
         {!noBreadcrumbs && <Breadcrumbs />}
         <main style={{ flex: 1, width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '20px', boxSizing: 'border-box' }}>

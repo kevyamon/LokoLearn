@@ -1,18 +1,13 @@
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/LandingPage.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
-// Importation directe de l'image pour garantir le chargement
-// Assure-toi que landing.png est bien dans src/assets/
-import bgImage from '../assets/landing.png';
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div 
-      className="landing-page"
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
+    <div className="landing-page">
       {/* Le voile sombre pour faire ressortir le texte */}
       <div className="landing-overlay"></div>
 

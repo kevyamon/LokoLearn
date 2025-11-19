@@ -1,6 +1,6 @@
-/* src/pages/LandingPage.css */
+/* kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/LandingPage.css */
 
-/* Conteneur Principal : Plein écran, Image de fond fixe */
+/* Conteneur Principal : Plein écran */
 .landing-page {
   min-height: 100vh;
   width: 100%;
@@ -10,20 +10,21 @@
   align-items: center;
   position: relative;
   overflow: hidden;
-  /* Fallback couleur si l'image ne charge pas */
-  background-color: #1a1a1a; 
+  
+  /* RÉPARATION : On utilise un dégradé professionnel au lieu de l'image cassée */
+  /* Un cercle rouge foncé au centre qui se fond vers du noir sur les bords */
+  background: radial-gradient(circle at center, #8B0000 0%, #1a0000 100%); 
 }
 
-/* L'image de fond est gérée via le style inline dans le JSX pour garantir le chargement via l'import JS */
-
-/* Overlay sombre dégradé pour la lisibilité */
+/* Overlay pour donner de la texture (optionnel, on garde une opacité faible) */
 .landing-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 100%);
+  /* On peut ajouter une texture ici si besoin, ou laisser transparent */
+  background-color: rgba(0, 0, 0, 0.2); 
   z-index: 1;
 }
 
@@ -54,7 +55,7 @@
 }
 
 .title-highlight {
-  color: #00aaff; /* Bleu électrique Loko */
+  color: #FFD700; /* Jaune Or (Couleur Loko) */
   position: relative;
   display: inline-block;
 }
@@ -73,7 +74,7 @@
 
 /* Bouton d'action principal */
 .start-button {
-  background: linear-gradient(90deg, #007bff, #0056b3);
+  background: linear-gradient(90deg, #d32f2f, #b71c1c); /* Rouge Loko */
   color: white;
   border: none;
   padding: 20px 60px;
@@ -82,7 +83,7 @@
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 10px 30px rgba(0, 123, 255, 0.4);
+  box-shadow: 0 10px 30px rgba(211, 47, 47, 0.4);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 3rem;
@@ -92,7 +93,7 @@
 
 .start-button:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 123, 255, 0.6);
+  box-shadow: 0 15px 40px rgba(211, 47, 47, 0.6);
 }
 
 .start-button::after {
@@ -110,7 +111,7 @@
   left: 100%;
 }
 
-/* Footer discret */
+/* Footer discret (celui de la landing page uniquement) */
 .landing-footer {
   margin-top: auto;
   padding-bottom: 20px;
