@@ -1,76 +1,107 @@
 // src/components/prof/CourseWizard/Step3Upload.jsx
-import React, { useCallback, useState } from 'react';
-import { Box, Typography, LinearProgress, Button } from '@mui/material';
-import { CloudUpload, PictureAsPdf, Description } from '@mui/icons-material';
-// Tu peux installer 'react-dropzone' pour un vrai drag & drop: npm install react-dropzone
+import React, { useState } from 'react';
+import { Box, Typography, LinearProgress, Button, Alert } from '@mui/material';
+import { CloudUpload, CheckCircle } from '@mui/icons-material';
+import api from '../../../../services/api'; // Ton instance Axios configurée
 
 const Step3Upload = ({ data, update }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Simulation d'upload pour la démo
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
+    // Reset des états
+    setError(null);
     setIsUploading(true);
-    // update('file', file);
-    // update('fileType', file.name.split('.').pop());
-    // update('fileSize', (file.size / 1024 / 1024).toFixed(2) + ' MB');
+    setUploadProgress(0);
 
-    // Simulation de progression
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 10;
-      setUploadProgress(progress);
-      if (progress >= 100) {
-        clearInterval(interval);
-        setIsUploading(false);
-        // Simulation retour Cloudinary
-        update('fileUrl', 'https://fake-cloudinary-url.com/moncours.pdf');
-      }
-    }, 200);
+    // Préparation du fichier pour l'envoi
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      // --- APPEL API RÉEL ---
+      const response = await api.post('/api/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(percentCompleted);
+        },
+      });
+
+      // Récupération des infos du fichier uploadé
+      const { url, format, bytes } = response.data;
+      
+      // Mise à jour du formulaire principal
+      update('fileUrl', url);
+      update('fileType', format);
+      update('fileSize', (bytes / 1024 / 1024).toFixed(2) + ' MB');
+
+    } catch (err) {
+      console.error(err);
+      setError("Échec de l'envoi. Vérifiez que le fichier fait moins de 10Mo.");
+      update('fileUrl', ''); // On vide l'URL en cas d'échec
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
-    <Box sx={{ textAlign: 'center', py: 4, border: '2px dashed #ccc', borderRadius: 4, bgcolor: '#fafafa', cursor: 'pointer', '&:hover': { borderColor: '#1976d2', bgcolor: '#f0f7ff' } }}>
+    <Box sx={{ textAlign: 'center', py: 4, border: '2px dashed #ccc', borderRadius: 4, bgcolor: '#fafafa', position: 'relative' }}>
       <input
         accept=".pdf,.doc,.docx,.ppt,.pptx"
         style={{ display: 'none' }}
-        id="raised-button-file"
+        id="upload-file-input"
         type="file"
         onChange={handleFileChange}
+        disabled={isUploading}
       />
-      <label htmlFor="raised-button-file" style={{ width: '100%', height: '100%', display: 'block' }}>
+      <label htmlFor="upload-file-input" style={{ width: '100%', height: '100%', display: 'block', cursor: isUploading ? 'wait' : 'pointer' }}>
         
+        {/* ÉTAT 1 : EN ATTENTE */}
         {!data.fileUrl && !isUploading && (
             <>
                 <CloudUpload sx={{ fontSize: 60, color: '#9e9e9e', mb: 2 }} />
                 <Typography variant="h6" color="text.secondary">
-                Glissez votre fichier ici ou cliquez pour parcourir
+                Cliquez ici pour déposer votre cours
                 </Typography>
-                <Typography variant="caption" display="block" mt={1}>
-                PDF, Word, PowerPoint acceptés (Max 10MB)
+                <Typography variant="caption" display="block" mt={1} color="text.disabled">
+                PDF, Word, PowerPoint (Max 10MB)
                 </Typography>
             </>
         )}
 
+        {/* ÉTAT 2 : UPLOAD EN COURS */}
         {isUploading && (
             <Box sx={{ width: '80%', mx: 'auto' }}>
-                <Typography mb={1}>Téléchargement en cours...</Typography>
+                <Typography mb={1} fontWeight="bold" color="primary">Envoi vers le serveur...</Typography>
                 <LinearProgress variant="determinate" value={uploadProgress} sx={{ height: 10, borderRadius: 5 }} />
-                <Typography variant="caption">{uploadProgress}%</Typography>
+                <Typography variant="caption" sx={{ mt: 1, display: 'block' }}>{uploadProgress}%</Typography>
             </Box>
         )}
 
+        {/* ÉTAT 3 : SUCCÈS */}
         {data.fileUrl && !isUploading && (
             <Box>
-                <PictureAsPdf sx={{ fontSize: 50, color: '#d32f2f', mb: 1 }} />
+                <CheckCircle sx={{ fontSize: 60, color: '#2e7d32', mb: 1 }} />
                 <Typography variant="h6" color="success.main" fontWeight="bold">
-                    Fichier prêt !
+                    Document prêt !
                 </Typography>
-                <Button color="warning" size="small" sx={{ mt: 1 }}>Changer de fichier</Button>
+                <Typography variant="body2" sx={{ mb: 2 }}>
+                   Type : {data.fileType?.toUpperCase()} • Taille : {data.fileSize}
+                </Typography>
+                <Button variant="outlined" color="warning" size="small" component="span">
+                  Remplacer le fichier
+                </Button>
             </Box>
+        )}
+
+        {/* ÉTAT 4 : ERREUR */}
+        {error && (
+            <Alert severity="error" sx={{ mt: 2, mx: 2 }}>{error}</Alert>
         )}
       </label>
     </Box>
