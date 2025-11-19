@@ -98,6 +98,7 @@ function App() {
         <Route path="/prof" element={<ProfLayout />}>
           <Route path="dashboard" element={<ProfDashboard />} />
           <Route path="publier" element={<ProfPublier />} />
+          <Route path="cours" element={<ProfDashboard />} />
         </Route>
 
       </Routes>
