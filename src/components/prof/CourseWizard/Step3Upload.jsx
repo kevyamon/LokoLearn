@@ -1,8 +1,8 @@
-// src/components/prof/CourseWizard/Step3Upload.jsx
 import React, { useState } from 'react';
 import { Box, Typography, LinearProgress, Button, Alert } from '@mui/material';
 import { CloudUpload, CheckCircle } from '@mui/icons-material';
-import api from '../../../../services/api'; // Ton instance Axios configurée
+// CORRECTION ICI : On remonte de 3 niveaux pour revenir à 'src', puis on va dans 'services'
+import api from '../../../services/api';
 
 const Step3Upload = ({ data, update }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -42,7 +42,9 @@ const Step3Upload = ({ data, update }) => {
 
     } catch (err) {
       console.error(err);
-      setError("Échec de l'envoi. Vérifiez que le fichier fait moins de 10Mo.");
+      // Gestion améliorée de l'erreur pour afficher le message du backend si dispo
+      const message = err.response?.data?.message || "Échec de l'envoi. Vérifiez que le fichier fait moins de 10Mo.";
+      setError(message);
       update('fileUrl', ''); // On vide l'URL en cas d'échec
     } finally {
       setIsUploading(false);
