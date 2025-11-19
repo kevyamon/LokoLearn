@@ -1,4 +1,4 @@
-// src/components/admin/AdminAuthModal.jsx
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/components/admin/adminAuthModal.jsx
 import React, { useState } from 'react';
 import { 
   Dialog, DialogContent, TextField, Button, Typography, 
@@ -10,7 +10,7 @@ import api from '../../services/api';
 
 const AdminAuthModal = ({ open, onClose }) => {
   const navigate = useNavigate();
-  const [tabIndex, setTabIndex] = useState(0); // 0: Login, 1: Register
+  const [tabIndex, setTabIndex] = useState(0); 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ const AdminAuthModal = ({ open, onClose }) => {
     email: '',
     phoneNumber: '',
     password: '',
-    adminKey: '' // La fameuse clé
+    adminKey: '' 
   });
 
   const handleChange = (e) => {
@@ -36,11 +36,17 @@ const AdminAuthModal = ({ open, onClose }) => {
     try {
       const { data } = await api.post(endpoint, formData);
       
-      // Succès
+      // SUCCÈS : On enregistre le badge ADMIN
       localStorage.setItem('adminInfo', JSON.stringify(data));
+      
+      // On ferme le modal
       onClose();
-      navigate('/admin'); // Vers le dashboard Admin
+      
+      // REDIRECTION IMMÉDIATE vers le Dashboard Admin
+      navigate('/admin'); 
+      
     } catch (err) {
+      console.error(err);
       setError(err.response?.data?.message || "Erreur d'authentification");
     } finally {
       setLoading(false);
@@ -48,15 +54,22 @@ const AdminAuthModal = ({ open, onClose }) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth PaperProps={{ sx: { borderRadius: 3, p: 1 } }}>
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth PaperProps={{ sx: { borderRadius: 3, p: 1, bgcolor: '#fff', color: '#333' } }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 2, mt: 1 }}>
         <Typography variant="h6" fontWeight="bold" color="error">
-          Zone Restreinte ☢️
+          Zone Admin ☢️
         </Typography>
         <IconButton onClick={onClose} size="small"><Close /></IconButton>
       </Box>
 
-      <Tabs value={tabIndex} onChange={(e, v) => { setTabIndex(v); setError(null); }} centered sx={{ mb: 2, mt: 1 }}>
+      <Tabs 
+        value={tabIndex} 
+        onChange={(e, v) => { setTabIndex(v); setError(null); }} 
+        centered 
+        sx={{ mb: 2, mt: 1 }}
+        indicatorColor="primary"
+        textColor="primary"
+      >
         <Tab label="Connexion" />
         <Tab label="Initialisation" />
       </Tabs>
