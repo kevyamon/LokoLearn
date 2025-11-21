@@ -1,13 +1,15 @@
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/components/prof/CourseWizard/Step3Upload.jsx
 import React, { useState } from 'react';
 import { Box, Typography, LinearProgress, Button, Alert } from '@mui/material';
 import { CloudUpload, CheckCircle } from '@mui/icons-material';
-// CORRECTION ICI : On remonte de 3 niveaux pour revenir à 'src', puis on va dans 'services'
+import { useNavigate } from 'react-router-dom'; // Pour rediriger si erreur auth
 import api from '../../../services/api';
 
 const Step3Upload = ({ data, update }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -24,6 +26,7 @@ const Step3Upload = ({ data, update }) => {
 
     try {
       // --- APPEL API RÉEL ---
+      // Note : 'api' injecte automatiquement le token du prof connecté
       const response = await api.post('/api/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
@@ -41,10 +44,21 @@ const Step3Upload = ({ data, update }) => {
       update('fileSize', (bytes / 1024 / 1024).toFixed(2) + ' MB');
 
     } catch (err) {
-      console.error(err);
-      // Gestion améliorée de l'erreur pour afficher le message du backend si dispo
-      const message = err.response?.data?.message || "Échec de l'envoi. Vérifiez que le fichier fait moins de 10Mo.";
-      setError(message);
+      console.error("Erreur Upload:", err);
+      
+      // Gestion spécifique des erreurs d'autorisation
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+         setError("Session expirée ou compte non autorisé. Veuillez vous reconnecter.");
+         // Optionnel : Déconnexion forcée après 2 secondes
+         setTimeout(() => {
+             localStorage.removeItem('profInfo');
+             navigate('/prof/login');
+         }, 3000);
+      } else {
+         const message = err.response?.data?.message || "Échec de l'envoi. Vérifiez votre connexion ou la taille du fichier (Max 10Mo).";
+         setError(message);
+      }
+      
       update('fileUrl', ''); // On vide l'URL en cas d'échec
     } finally {
       setIsUploading(false);
