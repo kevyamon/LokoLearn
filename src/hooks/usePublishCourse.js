@@ -1,47 +1,42 @@
-// src/hooks/usePublishCourse.js
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/hooks/usePublishCourse.js
 import { useState, useEffect } from 'react';
-import api from '../services/api'; // Ton instance Axios configurée
+import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
 export const usePublishCourse = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  
+  // Données du formulaire
   const [formData, setFormData] = useState({
-    filiere: '',
+    filiere: '', // On stockera le NOM de la filière
     niveau: '',
-    matiere: '',
-    typeCours: 'COURS', // COURS, TD, TP
+    matiere: '', // On stockera le NOM de la matière
+    typeCours: 'COURS',
     titre: '',
     description: '',
-    file: null, // Le fichier brut
-    fileUrl: '', // L'URL après upload Cloudinary
+    file: null,
+    fileUrl: '',
     fileType: '',
     fileSize: ''
   });
 
-  // Données dynamiques (chargées depuis le backend)
+  // Listes dynamiques (chargées depuis le backend)
   const [availableFilieres, setAvailableFilieres] = useState([]);
   const [availableSubjects, setAvailableSubjects] = useState([]);
 
   useEffect(() => {
-    // Charger les filières et matières au démarrage
     const fetchData = async () => {
-        // TODO: Décommenter quand le backend sera relié
-        // const { data } = await api.get('/api/courses/form-data');
-        // setAvailableFilieres(data.filieres);
-        // setAvailableSubjects(data.subjects);
-        
-        // Mock pour dev immédiat
-        setAvailableFilieres([
-            { _id: '1', name: 'IGL', type: 'LMD' }, 
-            { _id: '2', name: 'RIT', type: 'LMD' },
-            { _id: '3', name: 'AD', type: 'BTS' }
-        ]);
-        setAvailableSubjects([
-            { _id: 's1', name: 'Algorithmique', hasTP: true },
-            { _id: 's2', name: 'Droit', hasTP: false }
-        ]);
+      try {
+        // On récupère les vraies données de la DB
+        const { data } = await api.get('/api/courses/form-data');
+        setAvailableFilieres(data.filieres || []);
+        setAvailableSubjects(data.subjects || []);
+      } catch (error) {
+        console.error("Erreur chargement données formulaire", error);
+        // Fallback silencieux ou mock si besoin
+      }
     };
     fetchData();
   }, []);
@@ -56,11 +51,6 @@ export const usePublishCourse = () => {
   const handlePublish = async () => {
     setLoading(true);
     try {
-        // 1. Upload du fichier sur Cloudinary (si pas déjà fait)
-        // Note: Idéalement, on fait l'upload à l'étape 3 et on récupère l'URL.
-        // Ici on suppose que l'URL est déjà dans formData.fileUrl grâce au composant d'upload.
-
-        // 2. Envoi des données au Backend
         await api.post('/api/courses', {
             title: formData.titre,
             description: formData.description,
@@ -73,7 +63,7 @@ export const usePublishCourse = () => {
             fileSize: formData.fileSize
         });
 
-        // 3. Succès
+        alert("Cours publié avec succès !");
         navigate('/prof/dashboard');
     } catch (error) {
         console.error("Erreur publication", error);
