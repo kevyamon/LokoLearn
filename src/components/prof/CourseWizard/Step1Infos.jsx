@@ -1,18 +1,18 @@
 // kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/components/prof/CourseWizard/Step1Infos.jsx
-import React, { useState, useEffect, useMemo } from 'react';
-import { Grid, FormControl, InputLabel, Select, MenuItem, FormHelperText, TextField, Autocomplete, IconButton, ListItem } from '@mui/material';
+import React, { useState, useMemo } from 'react';
+import { Grid, FormControl, InputLabel, Select, MenuItem, FormHelperText, TextField, Autocomplete, IconButton } from '@mui/material';
 import { Star, StarBorder } from '@mui/icons-material';
 
 const Step1Infos = ({ data, update, filieres = [], subjects = [] }) => {
   
-  // 1. GESTION DES FAVORIS (Chargés depuis le localStorage)
+  // 1. FAVORIS
   const [favorites, setFavorites] = useState(() => {
     const saved = localStorage.getItem('prof_favorite_filieres');
     return saved ? JSON.parse(saved) : [];
   });
 
   const toggleFavorite = (e, filiereName) => {
-    e.stopPropagation(); // Empêche de sélectionner la ligne quand on clique sur l'étoile
+    e.stopPropagation();
     let newFavs;
     if (favorites.includes(filiereName)) {
       newFavs = favorites.filter(f => f !== filiereName);
@@ -23,17 +23,14 @@ const Step1Infos = ({ data, update, filieres = [], subjects = [] }) => {
     localStorage.setItem('prof_favorite_filieres', JSON.stringify(newFavs));
   };
 
-  // 2. LOGIQUE DE FILTRAGE ET TRI
+  // 2. FILTRAGE INTELLIGENT
   const filteredFilieres = useMemo(() => {
     let result = [...filieres];
 
-    // A) Filtrage par Cycle (BTS vs LMD) selon le niveau choisi
+    // A) Filtrage par NIVEAU EXACT
+    // On ne montre que les filières disponibles pour le niveau sélectionné
     if (data.niveau) {
-      const isBTS = data.niveau.startsWith('BTS');
-      const isLMD = ['L1', 'L2', 'L3', 'M1', 'M2'].includes(data.niveau);
-      
-      if (isBTS) result = result.filter(f => f.type === 'BTS');
-      if (isLMD) result = result.filter(f => f.type === 'LMD');
+        result = result.filter(f => f.levels && f.levels.includes(data.niveau));
     }
 
     // B) Tri : Favoris en premier, puis ordre alphabétique
@@ -52,7 +49,7 @@ const Step1Infos = ({ data, update, filieres = [], subjects = [] }) => {
   return (
     <Grid container spacing={3}>
       
-      {/* CHAMP 1 : NIVEAU (On le met en premier car il pilote le filtre des filières) */}
+      {/* 1. NIVEAU */}
       <Grid size={{ xs: 12, sm: 6 }}>
         <FormControl fullWidth>
           <InputLabel>Niveau</InputLabel>
@@ -61,8 +58,7 @@ const Step1Infos = ({ data, update, filieres = [], subjects = [] }) => {
             label="Niveau"
             onChange={(e) => {
                 update('niveau', e.target.value);
-                // Si le niveau change de cycle, on reset la filière si elle n'est plus compatible
-                // (Optionnel, pour l'instant on laisse flexible)
+                update('filiere', ''); // Reset filière quand niveau change
             }}
           >
             <MenuItem value="BTS1">BTS 1ère Année</MenuItem>
@@ -76,21 +72,21 @@ const Step1Infos = ({ data, update, filieres = [], subjects = [] }) => {
         </FormControl>
       </Grid>
 
-      {/* CHAMP 2 : FILIÈRE (Autocomplete avec Favoris) */}
+      {/* 2. FILIÈRE */}
       <Grid size={{ xs: 12, sm: 6 }}>
         <Autocomplete
-          freeSolo // Permet d'écrire une filière qui n'est pas dans la liste
+          freeSolo
           options={filteredFilieres}
           getOptionLabel={(option) => typeof option === 'string' ? option : option.name}
           value={data.filiere}
           onInputChange={(event, newInputValue) => {
             update('filiere', newInputValue);
           }}
+          // Si la liste est vide, on affiche un message d'aide
+          noOptionsText={data.niveau ? "Aucune filière trouvée pour ce niveau." : "Sélectionnez d'abord un niveau."}
           renderOption={(props, option) => {
-             // On extrait la clé pour éviter le warning React
              const { key, ...otherProps } = props;
              const isFav = favorites.includes(option.name);
-             
              return (
               <li key={key} {...otherProps} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span>{option.name}</span>
@@ -108,18 +104,18 @@ const Step1Infos = ({ data, update, filieres = [], subjects = [] }) => {
             <TextField 
                 {...params} 
                 label="Filière" 
-                placeholder={data.niveau ? "Recherchez ou sélectionnez..." : "Sélectionnez d'abord un niveau"}
+                placeholder={data.niveau ? "Recherchez votre filière..." : "Sélectionnez d'abord un niveau"}
                 helperText="Utilisez l'étoile pour vos filières favorites ⭐"
             />
           )}
         />
       </Grid>
 
-      {/* CHAMP 3 : MATIÈRE (Autocomplete simple) */}
+      {/* 3. MATIÈRE */}
       <Grid size={{ xs: 12 }}>
         <Autocomplete
             freeSolo
-            options={subjects.map(s => s.name)} // Juste une liste de noms
+            options={subjects.map(s => s.name)}
             value={data.matiere}
             onInputChange={(event, newInputValue) => update('matiere', newInputValue)}
             renderInput={(params) => (
@@ -128,7 +124,7 @@ const Step1Infos = ({ data, update, filieres = [], subjects = [] }) => {
         />
       </Grid>
 
-      {/* CHAMP 4 : TYPE DE DOCUMENT */}
+      {/* 4. TYPE */}
       <Grid size={{ xs: 12 }}>
         <FormControl fullWidth>
           <InputLabel>Type de document</InputLabel>

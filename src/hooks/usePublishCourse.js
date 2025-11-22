@@ -2,17 +2,18 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+// IMPORT DES DONNÉES DE SECOURS
+import { FALLBACK_FILIERES, FALLBACK_SUBJECTS } from '../data/fallbackData';
 
 export const usePublishCourse = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   
-  // Données du formulaire
   const [formData, setFormData] = useState({
-    filiere: '', // On stockera le NOM de la filière
+    filiere: '',
     niveau: '',
-    matiere: '', // On stockera le NOM de la matière
+    matiere: '',
     typeCours: 'COURS',
     titre: '',
     description: '',
@@ -22,20 +23,31 @@ export const usePublishCourse = () => {
     fileSize: ''
   });
 
-  // Listes dynamiques (chargées depuis le backend)
   const [availableFilieres, setAvailableFilieres] = useState([]);
   const [availableSubjects, setAvailableSubjects] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // On récupère les vraies données de la DB
+        // On tente de charger depuis le serveur
         const { data } = await api.get('/api/courses/form-data');
-        setAvailableFilieres(data.filieres || []);
-        setAvailableSubjects(data.subjects || []);
+        
+        if (!data.filieres || data.filieres.length === 0) {
+            setAvailableFilieres(FALLBACK_FILIERES);
+        } else {
+            setAvailableFilieres(data.filieres);
+        }
+
+        if (!data.subjects || data.subjects.length === 0) {
+            setAvailableSubjects(FALLBACK_SUBJECTS);
+        } else {
+            setAvailableSubjects(data.subjects);
+        }
+
       } catch (error) {
-        console.error("Erreur chargement données formulaire", error);
-        // Fallback silencieux ou mock si besoin
+        console.warn("API inaccessible, utilisation des données locales.");
+        setAvailableFilieres(FALLBACK_FILIERES);
+        setAvailableSubjects(FALLBACK_SUBJECTS);
       }
     };
     fetchData();
