@@ -19,12 +19,13 @@ import TpDetailPage from './pages/TpDetailPage';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import ManageBannerPage from './pages/admin/ManageBannerPage';
-import AdminSettingsPage from './pages/admin/AdminSettingsPage'; // NOUVEL IMPORT
+import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 import ProfLayout from './pages/prof/ProfLayout';
 import ProfLogin from './pages/prof/ProfLogin';
 import ProfRegister from './pages/prof/ProfRegister';
 import ProfDashboard from './pages/prof/ProfDashboard';
 import ProfPublier from './pages/prof/ProfPublier';
+import ProfCourses from './pages/prof/ProfCourses'; // NOUVEL IMPORT
 
 // Composants Communs
 import Header from './components/Header';
@@ -33,21 +34,18 @@ import Breadcrumbs from './components/common/Breadcrumbs';
 import ScrollToTopButton from './components/common/ScrollToTopButton';
 import SearchOverlay from './components/search/SearchOverlay';
 
-// --- LAYOUT PRINCIPAL (Contient Header + Sidebar + Footer Global) ---
+// --- LAYOUT PRINCIPAL ---
 const MainLayout = () => {
   return (
     <div className="app-background">
-      <Header /> {/* La Sidebar est cachée ici dedans */}
-      
-      {/* Padding-top pour ne pas être caché par le Header fixe */}
+      <Header />
       <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Breadcrumbs />
         <main style={{ flex: 1, width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-          <Outlet /> {/* C'est ici que les pages s'affichent */}
+          <Outlet />
         </main>
       </div>
-      
-      <Footer /> {/* Le Footer global avec le God Mode global */}
+      <Footer />
     </div>
   );
 };
@@ -57,22 +55,9 @@ function App() {
     <Router>
       <SearchOverlay />
       <Routes>
-        
-        {/* 1. LANDING PAGE : TOTALEMENT ISOLÉE */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<div className="app-background"><Header /><div style={{ paddingTop: '80px' }}><LoginPage /></div><Footer /></div>} />
 
-        {/* 2. LOGIN : ISOLÉ AUSSI */}
-        <Route path="/login" element={
-          <div className="app-background">
-            <Header />
-            <div style={{ paddingTop: '80px' }}>
-                <LoginPage />
-            </div>
-            <Footer />
-          </div>
-        } />
-
-        {/* 3. APPLICATION : TOUT LE RESTE DANS LE MAIN LAYOUT */}
         <Route element={<MainLayout />}>
           <Route path="/etudiant/dashboard" element={<StudentDashboard />} />
           <Route path="/choix-formation" element={<ChoixFormationPage />} />
@@ -85,19 +70,17 @@ function App() {
           <Route path="/tp/:annee/:matiereSlug/:tpId" element={<TpDetailPage />} />
         </Route>
 
-        {/* 4. SECTION ADMIN */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="banner" element={<ManageBannerPage />} />
-          <Route path="settings" element={<AdminSettingsPage />} /> {/* NOUVELLE ROUTE */}
+          <Route path="settings" element={<AdminSettingsPage />} />
         </Route>
 
-        {/* 5. SECTION PROF */}
         <Route path="/prof/login" element={<ProfLogin />} />
         <Route path="/prof/register" element={<ProfRegister />} />
         <Route path="/prof" element={<ProfLayout />}>
           <Route path="dashboard" element={<ProfDashboard />} />
-          <Route path="cours" element={<ProfDashboard />} /> {/* Placeholder */}
+          <Route path="cours" element={<ProfCourses />} /> {/* ICI : On a branché la nouvelle page */}
           <Route path="publier" element={<ProfPublier />} />
         </Route>
 
