@@ -7,9 +7,11 @@ import {
 import { Edit, Delete, Add, Visibility, CloudDownload } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import { useConfirm } from '../../contexts/ConfirmContext'; // IMPORT DU HOOK
 
 const ProfCourses = () => {
   const navigate = useNavigate();
+  const { confirm, alertInfo } = useConfirm(); // UTILISATION DU HOOK
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +19,6 @@ const ProfCourses = () => {
   const fetchCourses = async () => {
     try {
       const { data } = await api.get('/api/courses/my-stats');
-      // getProfStats renvoie 'allCourses' maintenant
       setCourses(data.allCourses || []); 
     } catch (error) {
       console.error("Erreur chargement cours", error);
@@ -30,22 +31,34 @@ const ProfCourses = () => {
     fetchCourses();
   }, []);
 
-  // Gérer la suppression
-  const handleDelete = async (id) => {
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce cours définitivement ?")) {
+  // Gérer la suppression (AVEC MODALE STYLISÉE)
+  const handleDelete = async (id, title) => {
+    // On attend la réponse de l'utilisateur via notre belle modale
+    const isConfirmed = await confirm(
+      "Suppression du cours",
+      `Êtes-vous sûr de vouloir supprimer définitivement le cours "${title}" ? Cette action est irréversible.`,
+      "error" // Couleur rouge
+    );
+
+    if (isConfirmed) {
       try {
         await api.delete(`/api/courses/${id}`);
-        // On met à jour la liste localement pour éviter de recharger
         setCourses(prev => prev.filter(c => c._id !== id));
+        // Petit feedback succès
+        alertInfo("Supprimé", "Le cours a été supprimé avec succès.", "success");
       } catch (error) {
-        alert("Erreur lors de la suppression.");
+        alertInfo("Erreur", "Impossible de supprimer ce cours.", "error");
       }
     }
   };
 
-  // Gérer la modification (Pour l'instant un placeholder, on fera le modal après)
+  // Gérer la modification (AVEC MODALE STYLISÉE)
   const handleEdit = (course) => {
-    alert(`Fonctionnalité d'édition pour "${course.title}" à venir dans la prochaine mise à jour !`);
+    alertInfo(
+      "Fonctionnalité à venir",
+      `L'édition du cours "${course.title}" sera disponible dans la prochaine mise à jour !`,
+      "info" // Couleur bleue
+    );
   };
 
   return (
@@ -103,7 +116,8 @@ const ProfCourses = () => {
                     <IconButton color="primary" onClick={() => handleEdit(course)} size="small">
                       <Edit />
                     </IconButton>
-                    <IconButton color="error" onClick={() => handleDelete(course._id)} size="small">
+                    {/* On passe aussi le titre pour le message personnalisé */}
+                    <IconButton color="error" onClick={() => handleDelete(course._id, course.title)} size="small">
                       <Delete />
                     </IconButton>
                   </TableCell>

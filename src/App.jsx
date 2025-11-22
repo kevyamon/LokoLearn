@@ -2,6 +2,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 
+// Contexts
+import { ConfirmProvider } from './contexts/ConfirmContext'; // NOUVEL IMPORT
+
 // Pages
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
@@ -25,7 +28,7 @@ import ProfLogin from './pages/prof/ProfLogin';
 import ProfRegister from './pages/prof/ProfRegister';
 import ProfDashboard from './pages/prof/ProfDashboard';
 import ProfPublier from './pages/prof/ProfPublier';
-import ProfCourses from './pages/prof/ProfCourses'; // NOUVEL IMPORT
+import ProfCourses from './pages/prof/ProfCourses';
 
 // Composants Communs
 import Header from './components/Header';
@@ -52,41 +55,43 @@ const MainLayout = () => {
 
 function App() {
   return (
-    <Router>
-      <SearchOverlay />
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<div className="app-background"><Header /><div style={{ paddingTop: '80px' }}><LoginPage /></div><Footer /></div>} />
+    <ConfirmProvider> {/* ON ENVELOPPE TOUTE L'APP ICI */}
+      <Router>
+        <SearchOverlay />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<div className="app-background"><Header /><div style={{ paddingTop: '80px' }}><LoginPage /></div><Footer /></div>} />
 
-        <Route element={<MainLayout />}>
-          <Route path="/etudiant/dashboard" element={<StudentDashboard />} />
-          <Route path="/choix-formation" element={<ChoixFormationPage />} />
-          <Route path="/choix-filiere" element={<ChoixFilierePage />} />
-          <Route path="/choix-niveau" element={<ChoixNiveauPage />} />
-          <Route path="/matieres/:annee" element={<ChoixMatierePage />} />
-          <Route path="/matiere/:annee/:matiereSlug" element={<MatierePage />} />
-          <Route path="/lecon/:annee/:matiereSlug/:chapitreIndex/:leconIndex" element={<LeconPage />} />
-          <Route path="/tp/:annee/:matiereSlug" element={<TpListPage />} />
-          <Route path="/tp/:annee/:matiereSlug/:tpId" element={<TpDetailPage />} />
-        </Route>
+          <Route element={<MainLayout />}>
+            <Route path="/etudiant/dashboard" element={<StudentDashboard />} />
+            <Route path="/choix-formation" element={<ChoixFormationPage />} />
+            <Route path="/choix-filiere" element={<ChoixFilierePage />} />
+            <Route path="/choix-niveau" element={<ChoixNiveauPage />} />
+            <Route path="/matieres/:annee" element={<ChoixMatierePage />} />
+            <Route path="/matiere/:annee/:matiereSlug" element={<MatierePage />} />
+            <Route path="/lecon/:annee/:matiereSlug/:chapitreIndex/:leconIndex" element={<LeconPage />} />
+            <Route path="/tp/:annee/:matiereSlug" element={<TpListPage />} />
+            <Route path="/tp/:annee/:matiereSlug/:tpId" element={<TpDetailPage />} />
+          </Route>
 
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboardPage />} />
-          <Route path="banner" element={<ManageBannerPage />} />
-          <Route path="settings" element={<AdminSettingsPage />} />
-        </Route>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboardPage />} />
+            <Route path="banner" element={<ManageBannerPage />} />
+            <Route path="settings" element={<AdminSettingsPage />} />
+          </Route>
 
-        <Route path="/prof/login" element={<ProfLogin />} />
-        <Route path="/prof/register" element={<ProfRegister />} />
-        <Route path="/prof" element={<ProfLayout />}>
-          <Route path="dashboard" element={<ProfDashboard />} />
-          <Route path="cours" element={<ProfCourses />} /> {/* ICI : On a branché la nouvelle page */}
-          <Route path="publier" element={<ProfPublier />} />
-        </Route>
+          <Route path="/prof/login" element={<ProfLogin />} />
+          <Route path="/prof/register" element={<ProfRegister />} />
+          <Route path="/prof" element={<ProfLayout />}>
+            <Route path="dashboard" element={<ProfDashboard />} />
+            <Route path="cours" element={<ProfCourses />} />
+            <Route path="publier" element={<ProfPublier />} />
+          </Route>
 
-      </Routes>
-      <ScrollToTopButton />
-    </Router>
+        </Routes>
+        <ScrollToTopButton />
+      </Router>
+    </ConfirmProvider>
   );
 }
 
