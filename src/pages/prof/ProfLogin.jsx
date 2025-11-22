@@ -1,38 +1,46 @@
 // kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/prof/ProfLogin.jsx
 import React, { useState } from 'react';
-import { Box, Paper, Typography, TextField, Button, Alert, InputAdornment } from '@mui/material';
+import { Box, Paper, Typography, TextField, Button, InputAdornment } from '@mui/material';
 import { Email, Lock, School, ArrowBack } from '@mui/icons-material';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api';
+import { useConfirm } from '../../contexts/ConfirmContext'; // IMPORT
 
 const ProfLogin = () => {
   const navigate = useNavigate();
+  const { alertInfo } = useConfirm(); // HOOK
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     try {
-      // APPEL API RÉEL
       const { data } = await api.post('/api/users/prof/login', { 
         email: formData.email, 
         password: formData.password 
       });
 
-      // Si on est là, c'est que c'est bon (200 OK)
-      // On enregistre les VRAIES infos du prof et le VRAI token
       localStorage.setItem('profInfo', JSON.stringify(data));
       
-      // Redirection vers le dashboard (qui va maintenant charger les vraies stats)
+      // SUCCÈS (Modale)
+      await alertInfo(
+        "Connexion réussie", 
+        `Bienvenue Professeur ${data.name}.`, 
+        "success"
+      );
+
       navigate('/prof/dashboard');
 
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || 'Email ou mot de passe incorrect');
+      // ERREUR (Modale)
+      alertInfo(
+        "Accès refusé", 
+        err.response?.data?.message || 'Email ou mot de passe incorrect', 
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -55,7 +63,7 @@ const ProfLogin = () => {
         <Typography variant="h5" fontWeight="bold" gutterBottom>Espace Enseignant</Typography>
         <Typography variant="body2" color="text.secondary" mb={4}>Connectez-vous pour gérer vos cours</Typography>
 
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {/* On a retiré l'Alert MUI ici */}
 
         <form onSubmit={handleSubmit}>
           <TextField
@@ -72,6 +80,7 @@ const ProfLogin = () => {
             {loading ? 'Connexion...' : 'Se connecter'}
           </Button>
         </form>
+        
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <Link to="/prof/register" style={{ textDecoration: 'none', color: '#3f51b5', fontSize: '0.9rem' }}>
             Nouveau professeur ? Créer un compte

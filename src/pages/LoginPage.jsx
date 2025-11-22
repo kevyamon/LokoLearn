@@ -1,27 +1,26 @@
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api'; // On importe notre service API unifié
+import api from '../services/api';
+import { useConfirm } from '../contexts/ConfirmContext'; // IMPORT DU HOOK
 import './LoginPage.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { alertInfo } = useConfirm(); // On récupère la fonction d'alerte
   
   const [step, setStep] = useState(1); 
   const [mode, setMode] = useState('login'); 
   const [matricule, setMatricule] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   // ÉTAPE 1 : VÉRIFICATION DU MATRICULE
   const handleCheckMatricule = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     try {
-      // Avec api.js, on ne met que la fin de l'URL. 
-      // Axios gère le domaine (http://.../api/...) automatiquement.
       const { data } = await api.post('/api/users/check', { matricule });
 
       if (data.exists) {
@@ -33,8 +32,12 @@ const LoginPage = () => {
 
     } catch (err) {
       console.error(err);
-      // Axios renvoie l'erreur dans err.response.data.message
-      setError(err.response?.data?.message || "Erreur de connexion au serveur");
+      // ERREUR JOLIE
+      alertInfo(
+        "Erreur", 
+        err.response?.data?.message || "Erreur de connexion au serveur", 
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -43,7 +46,6 @@ const LoginPage = () => {
   // ÉTAPE 2 : CONNEXION OU CRÉATION
   const handleFinalSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     const endpoint = mode === 'login' ? '/api/users/login' : '/api/users/register';
@@ -51,13 +53,26 @@ const LoginPage = () => {
     try {
       const { data } = await api.post(endpoint, { matricule, password });
 
-      // Succès : Axios ne lance pas d'exception si le statut est 200/201
+      // Succès : On sauvegarde
       localStorage.setItem('userInfo', JSON.stringify(data));
+      
+      // MESSAGE DE SUCCÈS AVANT REDIRECTION
+      await alertInfo(
+        "Bienvenue !", 
+        `Connexion réussie. Heureux de vous revoir, ${data.matricule}.`, 
+        "success"
+      );
+
       navigate('/etudiant/dashboard');
 
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || "Erreur d'authentification");
+      // ERREUR JOLIE
+      alertInfo(
+        "Échec de connexion", 
+        err.response?.data?.message || "Identifiants incorrects", 
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -84,7 +99,7 @@ const LoginPage = () => {
                 disabled={loading}
                 style={{ textAlign: 'center' }} 
               />
-              {error && <p className="error-message">{error}</p>}
+              {/* Plus besoin de <p className="error-message"> */}
               <button type="submit" disabled={loading}>
                 {loading ? "Vérification..." : "Continuer"}
               </button>
@@ -108,7 +123,6 @@ const LoginPage = () => {
                 autoFocus
                 style={{ textAlign: 'center' }}
               />
-              {error && <p className="error-message">{error}</p>}
               
               <button type="submit" disabled={loading}>
                 {loading ? "Chargement..." : (mode === 'login' ? "Se connecter" : "Activer")}
@@ -117,7 +131,7 @@ const LoginPage = () => {
               <button 
                 type="button" 
                 className="btn-back" 
-                onClick={() => { setStep(1); setError(''); setPassword(''); }}
+                onClick={() => { setStep(1); setPassword(''); }}
                 style={{ marginTop: '15px', background: 'transparent', color: '#888', border: 'none', textDecoration:'underline', cursor:'pointer', fontSize: '0.9rem' }}
               >
                 Retour
