@@ -8,7 +8,7 @@ import {
   Close, ZoomIn 
 } from '@mui/icons-material';
 import { 
-  Dialog, AppBar, Toolbar, IconButton, Typography, Slide, Box, Button // <--- AJOUT DE BUTTON ICI
+  Dialog, AppBar, Toolbar, IconButton, Typography, Slide, Box, Button // Button est bien là !
 } from '@mui/material';
 import api from '../services/api';
 
@@ -19,6 +19,12 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 const MatierePage = () => {
   const { annee, matiereSlug } = useParams();
+  
+  // --- CORRECTION CRITIQUE ICI ---
+  // On prend 'annee' tel quel car il contient déjà "BTS1", "L1", etc.
+  const niveauTechnique = annee; 
+  // -------------------------------
+
   const [allCourses, setAllCourses] = useState([]); 
   const [filteredCourses, setFilteredCourses] = useState([]); 
   const [loading, setLoading] = useState(true);
@@ -29,14 +35,13 @@ const MatierePage = () => {
   const [currentDoc, setCurrentDoc] = useState(null); 
 
   const filiereName = localStorage.getItem('selectedFiliereName');
-  const filiereType = localStorage.getItem('selectedFiliereType');
-  const niveauTechnique = filiereType ? `${filiereType}${annee}` : `L${annee}`;
   const displayTitle = matiereSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
+        // Appel avec le bon niveau (BTS1)
         const { data } = await api.get(`/api/courses`, {
             params: { filiere: filiereName, level: niveauTechnique }
         });
@@ -66,7 +71,6 @@ const MatierePage = () => {
     }
   }, [searchTerm, allCourses]);
 
-  // TRACKING VUE
   const trackView = async (courseId) => {
     try {
         await api.put(`/api/courses/${courseId}/view`);
@@ -76,7 +80,6 @@ const MatierePage = () => {
     } catch (e) { console.error(e); }
   };
 
-  // 1. TÉLÉCHARGEMENT DIRECT
   const handleDownload = async (e, course) => {
     e.stopPropagation(); 
     try {
@@ -86,7 +89,6 @@ const MatierePage = () => {
     } catch (e) { console.error(e); }
   };
 
-  // 2. OUVERTURE DU VISUALISEUR
   const handlePreview = (course) => {
     setCurrentDoc(course);
     setViewerOpen(true);
@@ -100,12 +102,10 @@ const MatierePage = () => {
     return <Description style={{ color: '#555', fontSize: 40 }} />;
   };
 
-  // LOGIQUE DU LECTEUR
   const renderViewerContent = () => {
     if (!currentDoc) return null;
 
     const isPdf = currentDoc.fileType.includes('pdf');
-    // Détection Office améliorée
     const isOffice = currentDoc.fileType.includes('word') || 
                      currentDoc.fileType.includes('doc') || 
                      currentDoc.fileType.includes('presentation') || 
@@ -158,6 +158,7 @@ const MatierePage = () => {
       <div className="container">
         <div className="matiere-header-top">
             <NavigateBackButton />
+            {/* On affiche le bon niveau maintenant */}
             <span className="niveau-badge">{filiereName} - {niveauTechnique}</span>
         </div>
         
