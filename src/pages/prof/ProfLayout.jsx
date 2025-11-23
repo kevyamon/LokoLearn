@@ -4,15 +4,18 @@ import { Outlet, Navigate } from 'react-router-dom';
 import { Box, IconButton, AppBar, Toolbar, Typography } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import ProfSidebar from '../../components/prof/ProfSidebar';
+import { authService } from '../../services/authService'; // Import du service
 
 const drawerWidth = 280;
 
 const ProfLayout = () => {
-  // Sécurité basique
-  const isAuth = localStorage.getItem('profInfo');
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  if (!isAuth) {
+  // VÉRIFICATION SÉCURISÉE DE LA SESSION
+  const session = authService.checkSession();
+  
+  // Si pas de session, ou session expirée, ou mauvais rôle => DEHORS
+  if (!session || !session.valid || (session.role !== 'professor' && session.role !== 'prof' && session.role !== 'admin')) {
     return <Navigate to="/prof/login" replace />;
   }
 
@@ -23,13 +26,12 @@ const ProfLayout = () => {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f4f6f8' }}>
       
-      {/* Barre d'outils Mobile (pour ouvrir le menu) */}
       <AppBar
         position="fixed"
         sx={{
           width: { md: `calc(100% - ${drawerWidth}px)` },
           ml: { md: `${drawerWidth}px` },
-          display: { md: 'none' }, // Caché sur PC
+          display: { md: 'none' },
           bgcolor: '#1a1c23',
           boxShadow: 'none',
           borderBottom: '1px solid rgba(255,255,255,0.1)'
@@ -51,18 +53,16 @@ const ProfLayout = () => {
         </Toolbar>
       </AppBar>
 
-      {/* La Sidebar Intelligente */}
       <ProfSidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
 
-      {/* Zone de Contenu Principale */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
           width: { md: `calc(100% - ${drawerWidth}px)` },
-          mt: { xs: 8, md: 0 }, // Marge en haut sur mobile pour ne pas être caché par la barre
-          overflowX: 'hidden' // Empêche le scroll horizontal
+          mt: { xs: 8, md: 0 },
+          overflowX: 'hidden'
         }}
       >
         <Outlet />
