@@ -1,8 +1,9 @@
-// src/components/Sidebar.jsx
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/components/Sidebar.jsx
 import React from 'react';
 import { Box, List, ListItemButton, ListItemIcon, ListItemText, Divider, IconButton, Typography } from '@mui/material';
-import { Home, School, Person, Close, Login } from '@mui/icons-material';
+import { Home, School, Person, Close } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { authService } from '../services/authService'; // Import du service
 
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
@@ -12,6 +13,26 @@ const Sidebar = ({ isOpen, onClose }) => {
     { text: 'Espace Étudiant', icon: <School />, path: '/login' },
     { text: 'Espace Professeur', icon: <Person />, path: '/prof/login' },
   ];
+
+  const handleNavigation = (path) => {
+    // Si on clique sur "Accueil" ('/')
+    if (path === '/') {
+        const session = authService.checkSession();
+        if (session && session.valid) {
+            // Redirection intelligente vers le dashboard
+            if (session.role === 'student') navigate('/etudiant/dashboard');
+            else if (session.role === 'professor') navigate('/prof/dashboard');
+            else if (session.role === 'admin') navigate('/admin');
+        } else {
+            // Sinon accueil normal
+            navigate('/');
+        }
+    } else {
+        // Pour les autres liens (Connexion, etc.), navigation normale
+        navigate(path);
+    }
+    onClose(); // On ferme le menu après le clic
+  };
 
   return (
     <>
@@ -42,7 +63,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           {menuItems.map((item) => (
             <ListItemButton 
               key={item.text} 
-              onClick={() => { navigate(item.path); onClose(); }}
+              onClick={() => handleNavigation(item.path)}
               sx={{ borderRadius: 2, mb: 1 }}
             >
               <ListItemIcon sx={{ color: '#3f51b5' }}>{item.icon}</ListItemIcon>
