@@ -1,24 +1,134 @@
-/* On s'assure que l'import est la première règle du fichier */
-@import url('./ChoixFormationPage.css');
+/* kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/ChoixNiveauPage.css */
 
-/* On ajoute juste les couleurs spécifiques pour les nouveaux boutons */
-.annee1-button {
-  background: linear-gradient(135deg, #007bff, #0056b3); /* Bleu */
-  font-size: 2rem;
-  padding: 10px;
-  line-height: 1.2; /* Améliore l'affichage du texte sur plusieurs lignes */
+.choix-niveau-container {
+  padding: 100px 2rem 50px 2rem;
+  min-height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.annee2-button {
-  background: linear-gradient(135deg, #28a745, #1e7e34); /* Vert */
-  font-size: 2rem;
-  padding: 10px;
-  line-height: 1.2;
+.niveau-header {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  position: relative;
 }
 
-/* On ajuste la taille de la police pour mobile, comme pour les autres boutons */
+/* Sur grand écran, on centre le titre proprement */
+.niveau-header > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 100px; /* Compense le bouton retour pour centrer */
+}
+
+.choix-niveau-title {
+  font-size: 2.8rem;
+  margin: 0 0 10px 0;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.filiere-badge {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #00aaff;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* GRILLE DES BOUTONS */
+.niveaux-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+/* STYLE GÉNÉRAL DU BOUTON */
+.niveau-button {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.8);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: popIn 0.5s ease-out forwards;
+}
+
+.niveau-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+  border-color: white;
+}
+
+/* --- COULEURS SPÉCIFIQUES --- */
+
+/* BTS */
+.bts-1 { background: linear-gradient(135deg, #007bff, #0056b3); } /* Bleu */
+.bts-2 { background: linear-gradient(135deg, #28a745, #1e7e34); } /* Vert */
+
+/* LMD - LICENCE */
+.lmd-l1 { background: linear-gradient(135deg, #17a2b8, #117a8b); } /* Cyan */
+.lmd-l2 { background: linear-gradient(135deg, #007bff, #0056b3); } /* Bleu */
+.lmd-l3 { background: linear-gradient(135deg, #6610f2, #520dc2); } /* Violet */
+
+/* LMD - MASTER */
+.lmd-m1 { background: linear-gradient(135deg, #fd7e14, #ca6510); } /* Orange */
+.lmd-m2 { background: linear-gradient(135deg, #dc3545, #bd2130); } /* Rouge */
+
+/* ANIMATION */
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* --- MOBILE --- */
 @media (max-width: 768px) {
-  .annee1-button, .annee2-button {
-    font-size: 1.6rem;
+  .choix-niveau-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .niveau-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .niveau-header > div {
+    margin-right: 0; /* On annule la compensation sur mobile */
+  }
+
+  .choix-niveau-title {
+    font-size: 2rem;
+  }
+
+  .niveaux-grid {
+    gap: 1.5rem;
+  }
+
+  .niveau-button {
+    width: 160px;
+    height: 160px;
+    font-size: 1.3rem;
   }
 }
