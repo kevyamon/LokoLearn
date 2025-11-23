@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 
 // Contexts
-import { ConfirmProvider } from './contexts/ConfirmContext'; // NOUVEL IMPORT
+import { ConfirmProvider } from './contexts/ConfirmContext';
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -33,7 +33,7 @@ import ProfCourses from './pages/prof/ProfCourses';
 // Composants Communs
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Breadcrumbs from './components/common/Breadcrumbs';
+// import Breadcrumbs from './components/common/Breadcrumbs'; // RETIRÉ
 import ScrollToTopButton from './components/common/ScrollToTopButton';
 import SearchOverlay from './components/search/SearchOverlay';
 
@@ -43,7 +43,9 @@ const MainLayout = () => {
     <div className="app-background">
       <Header />
       <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <Breadcrumbs />
+        
+        {/* Breadcrumbs RETIRÉ ICI pour alléger le design */}
+        
         <main style={{ flex: 1, width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
           <Outlet />
         </main>
@@ -55,7 +57,7 @@ const MainLayout = () => {
 
 function App() {
   return (
-    <ConfirmProvider> {/* ON ENVELOPPE TOUTE L'APP ICI */}
+    <ConfirmProvider>
       <Router>
         <SearchOverlay />
         <Routes>

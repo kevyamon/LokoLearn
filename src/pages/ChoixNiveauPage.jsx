@@ -6,34 +6,30 @@ import './ChoixNiveauPage.css';
 
 const ChoixNiveauPage = () => {
   const navigate = useNavigate();
-
-  // On récupère ce qu'on a sauvegardé à l'étape précédente
   const filiereName = localStorage.getItem('selectedFiliereName');
-  const filiereType = localStorage.getItem('selectedFiliereType') || 'BTS'; // Par défaut BTS si bug
+  const filiereType = localStorage.getItem('selectedFiliereType') || 'BTS';
 
-  // Définition des niveaux selon le cycle
+  // Codes explicites pour éviter la confusion LMD1
   const niveaux = filiereType === 'BTS' 
     ? [
-        { label: "1ère Année", value: "1", styleClass: "bts-1" },
-        { label: "2ème Année", value: "2", styleClass: "bts-2" }
+        { label: "1ère Année", value: "BTS1", styleClass: "bts-1" },
+        { label: "2ème Année", value: "BTS2", styleClass: "bts-2" }
       ]
     : [
-        { label: "Licence 1", value: "1", styleClass: "lmd-l1" },
-        { label: "Licence 2", value: "2", styleClass: "lmd-l2" },
-        { label: "Licence 3", value: "3", styleClass: "lmd-l3" },
-        { label: "Master 1", value: "1", styleClass: "lmd-m1" }, // Note: L'URL sera matieres/1 mais le contexte sera M1 via le type
-        { label: "Master 2", value: "2", styleClass: "lmd-m2" }
+        { label: "Licence 1", value: "L1", styleClass: "lmd-l1" },
+        { label: "Licence 2", value: "L2", styleClass: "lmd-l2" },
+        { label: "Licence 3", value: "L3", styleClass: "lmd-l3" },
+        { label: "Master 1", value: "M1", styleClass: "lmd-m1" },
+        { label: "Master 2", value: "M2", styleClass: "lmd-m2" }
       ];
 
   const handleNiveauClick = (valeur) => {
-    // On navigue vers la page des matières
-    // Note : Pour LMD Master, on envoie quand même 1 ou 2, mais ChoixMatierePage saura distinguer grâce au filiereType
+    // On envoie le code précis (L1, M1...) dans l'URL
     navigate(`/matieres/${valeur}`); 
   };
 
   return (
     <div className="choix-niveau-container">
-      
       <div className="niveau-header">
         <NavigateBackButton />
         <div style={{ textAlign: 'center' }}>
@@ -45,7 +41,7 @@ const ChoixNiveauPage = () => {
       <div className="niveaux-grid">
         {niveaux.map((niveau) => (
           <button 
-            key={niveau.label}
+            key={niveau.value}
             className={`niveau-button ${niveau.styleClass}`}
             onClick={() => handleNiveauClick(niveau.value)}
           >
