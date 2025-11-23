@@ -1,22 +1,14 @@
+// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/ChoixFormationPage.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useModal } from '../contexts/ModalContext'; // 1. Importer
 import './ChoixFormationPage.css';
 
 const ChoixFormationPage = () => {
   const navigate = useNavigate();
-  const { showModal } = useModal(); // 2. Récupérer
 
-  const handleBtsClick = () => {
-    navigate('/choix-filiere'); 
-  };
-
-  const handleLmdClick = () => {
-    // 3. Utiliser notre système centralisé
-    showModal(
-      "Section en Développement",
-      "Le parcours LMD est en cours de préparation et sera bientôt disponible sur LokoLearn."
-    );
+  const handleFormationClick = (type) => {
+    // On navigue vers la page des filières en passant le type choisi (BTS ou LMD)
+    navigate('/choix-filiere', { state: { typeFormation: type } });
   };
 
   return (
@@ -25,13 +17,13 @@ const ChoixFormationPage = () => {
       <div className="buttons-container">
         <button 
           className="choix-button bts-button"
-          onClick={handleBtsClick}
+          onClick={() => handleFormationClick('BTS')}
         >
           BTS
         </button>
         <button 
           className="choix-button lmd-button"
-          onClick={handleLmdClick}
+          onClick={() => handleFormationClick('LMD')}
         >
           LMD
         </button>
