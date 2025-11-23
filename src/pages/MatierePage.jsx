@@ -9,18 +9,15 @@ import {
 } from '@mui/icons-material';
 import { 
   Dialog, AppBar, Toolbar, IconButton, Typography, Slide, Box, Button, CircularProgress 
-} from '@mui/material'; // <--- BUTTON EST BIEN LÀ MAINTENANT
+} from '@mui/material'; // <-- L'IMPORT MANQUANT EST BIEN LÀ
 import api from '../services/api';
 
-// Transition pour le modal plein écran
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const MatierePage = () => {
   const { annee, matiereSlug } = useParams();
-  
-  // On garde le niveau tel quel (L1, BTS1, etc.)
   const niveauTechnique = annee; 
 
   const [allCourses, setAllCourses] = useState([]); 
@@ -28,7 +25,6 @@ const MatierePage = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // --- ÉTATS POUR LE VISUALISEUR ---
   const [viewerOpen, setViewerOpen] = useState(false);
   const [currentDoc, setCurrentDoc] = useState(null); 
 
@@ -99,7 +95,6 @@ const MatierePage = () => {
     return <Description style={{ color: '#555', fontSize: 40 }} />;
   };
 
-  // --- CŒUR DU SYSTÈME DE LECTURE ---
   const renderViewerContent = () => {
     if (!currentDoc) return null;
 
@@ -111,24 +106,32 @@ const MatierePage = () => {
                      currentDoc.fileType.includes('sheet') ||
                      currentDoc.fileType.includes('xls');
 
-    // On encode l'URL pour qu'elle passe bien dans les lecteurs
-    const encodedUrl = encodeURIComponent(currentDoc.fileUrl);
-
     if (isPdf) {
-        // SOLUTION ANTI-ECRAN NOIR : Utiliser Google Viewer pour les PDF aussi
-        // Cela contourne les restrictions 401/CORS des navigateurs
+        // SOLUTION ROBUSTE : UTILISER LA BALISE <OBJECT> POUR LES PDF
+        // Cela utilise le lecteur PDF intégré au navigateur (Chrome/Edge/Firefox)
+        // Pas de blocage "Tracking" comme avec Google Viewer
         return (
-            <iframe 
-                src={`https://docs.google.com/gview?embedded=true&url=${encodedUrl}`}
-                title="Lecteur PDF Universel"
-                width="100%" 
-                height="100%" 
-                frameBorder="0"
-                style={{ border: 'none', backgroundColor: '#2c2c2c' }} 
-            />
+            <object
+                data={currentDoc.fileUrl}
+                type="application/pdf"
+                width="100%"
+                height="100%"
+                style={{ border: 'none' }}
+            >
+                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100%" color="white">
+                    <Typography variant="h6" gutterBottom>Impossible d'afficher le PDF directement.</Typography>
+                    <Button 
+                        variant="contained" 
+                        startIcon={<Download />} 
+                        onClick={(e) => handleDownload(e, currentDoc)}
+                    >
+                        Télécharger pour voir
+                    </Button>
+                </Box>
+            </object>
         );
     } else if (isOffice) {
-        // Lecteur Microsoft pour Word/Excel/PPT
+        const encodedUrl = encodeURIComponent(currentDoc.fileUrl);
         return (
             <iframe 
                 src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}`} 
@@ -141,7 +144,6 @@ const MatierePage = () => {
             </iframe>
         );
     } else {
-        // Fallback
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100%" color="white">
                 <Typography variant="h5" gutterBottom>Aperçu non disponible</Typography>
