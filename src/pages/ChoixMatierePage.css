@@ -1,38 +1,158 @@
+/* kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/ChoixMatierePage.css */
+
 .choix-matiere-container {
-  padding: 100px 2rem 50px 2rem;
+  padding: 30px 2rem 50px 2rem;
   min-height: 100vh;
   color: white;
 }
 
-.choix-matiere-title {
-  text-align: center;
-  font-size: 2.8rem;
-  margin-bottom: 3rem;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+/* En-tête */
+.matiere-page-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
+/* Sur PC, bouton retour absolu à gauche */
+.matiere-page-header .back-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.header-text-content {
+  text-align: center;
+}
+
+.choix-matiere-title {
+  font-size: 2.2rem; /* Un peu plus petit pour tenir sur les longs noms */
+  margin: 0 0 10px 0;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+}
+
+.niveau-badge-large {
+  background-color: #00aaff;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 10px rgba(0, 170, 255, 0.3);
+}
+
+/* --- BARRE DE RECHERCHE --- */
+.search-bar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+.search-input-field {
+  width: 100%;
+  padding: 12px 20px 12px 45px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.search-input-field:focus {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-color: #00aaff;
+  box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+}
+
+/* --- GRILLE & EMPTY STATE --- */
 .matiere-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* --- DEBUT DES STYLES POUR MOBILE --- */
+/* Style pour le message "Aucun cours" */
+.empty-matiere-state {
+  grid-column: 1 / -1; /* Prend toute la largeur */
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.empty-matiere-state h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.empty-matiere-state p {
+  color: #ccc;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.empty-matiere-state .sub-text {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 15px;
+  font-style: italic;
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #ccc;
+  margin-top: 20px;
+}
+
+/* --- MOBILE --- */
 @media (max-width: 768px) {
   .choix-matiere-container {
     padding-left: 1rem;
     padding-right: 1rem;
   }
 
+  .matiere-page-header {
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 1.5rem;
+  }
+
+  .matiere-page-header .back-button {
+    position: static;
+    align-self: flex-start;
+  }
+
   .choix-matiere-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .matiere-grid {
-    grid-template-columns: 1fr; /* On passe à une seule colonne sur mobile */
+    grid-template-columns: 1fr; /* Une seule colonne sur mobile */
     gap: 1rem;
   }
 }
-/* --- FIN DES STYLES POUR MOBILE --- */

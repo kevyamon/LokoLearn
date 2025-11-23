@@ -6,21 +6,29 @@ import Step1Infos from './Step1Infos';
 import Step2Details from './Step2Details';
 import Step3Upload from './Step3Upload';
 import { usePublishCourse } from '../../../hooks/usePublishCourse';
+import { useConfirm } from '../../../contexts/ConfirmContext'; // Import du Context
 
 const steps = ['Informations', 'Détails', 'Document'];
 
 const CourseWizard = () => {
   const navigate = useNavigate();
+  const { confirm } = useConfirm(); // Récupération de la fonction confirm
   const { 
     step, nextStep, prevStep, 
     formData, updateField, 
     loading, handlePublish,
-    availableFilieres, availableSubjects // On récupère les listes
+    availableFilieres, availableSubjects 
   } = usePublishCourse();
 
-  // GESTION BOUTON ANNULER
-  const handleCancel = () => {
-    if (window.confirm("Voulez-vous vraiment annuler ? Toutes les données saisies seront perdues.")) {
+  // GESTION BOUTON ANNULER (Avec Modale Stylisée)
+  const handleCancel = async () => {
+    const isConfirmed = await confirm(
+        "Annuler la publication ?",
+        "Toutes les données saisies seront perdues. Voulez-vous vraiment quitter ?",
+        "warning"
+    );
+
+    if (isConfirmed) {
       navigate('/prof/dashboard');
     }
   };
@@ -32,8 +40,8 @@ const CourseWizard = () => {
           <Step1Infos 
             data={formData} 
             update={updateField} 
-            filieres={availableFilieres} // On passe les filières
-            subjects={availableSubjects} // On passe les matières
+            filieres={availableFilieres} 
+            subjects={availableSubjects} 
           />
         );
       case 2: return <Step2Details data={formData} update={updateField} />;

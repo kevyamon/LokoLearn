@@ -2,11 +2,12 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
-// IMPORT DES DONNÉES DE SECOURS
+import { useConfirm } from '../contexts/ConfirmContext'; // 1. Import du Context
 import { FALLBACK_FILIERES, FALLBACK_SUBJECTS } from '../data/fallbackData';
 
 export const usePublishCourse = () => {
   const navigate = useNavigate();
+  const { alertSuccessTimer, alertInfo } = useConfirm(); // 2. Récupération des outils
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   
@@ -29,7 +30,6 @@ export const usePublishCourse = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // On tente de charger depuis le serveur
         const { data } = await api.get('/api/courses/form-data');
         
         if (!data.filieres || data.filieres.length === 0) {
@@ -75,11 +75,22 @@ export const usePublishCourse = () => {
             fileSize: formData.fileSize
         });
 
-        alert("Cours publié avec succès !");
+        // 3. MODALE SUCCÈS AVEC TIMER
+        await alertSuccessTimer(
+            "Publication Réussie !", 
+            "Votre cours est maintenant en ligne et visible par les étudiants. Retour au tableau de bord dans", 
+            3
+        );
+        
         navigate('/prof/dashboard');
     } catch (error) {
         console.error("Erreur publication", error);
-        alert("Erreur lors de la publication.");
+        // 4. MODALE ERREUR STYLISÉE
+        alertInfo(
+            "Échec de la publication", 
+            "Une erreur est survenue lors de l'enregistrement. Vérifiez votre connexion internet.", 
+            "error"
+        );
     } finally {
         setLoading(false);
     }

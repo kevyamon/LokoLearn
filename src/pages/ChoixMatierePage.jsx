@@ -1,17 +1,20 @@
 // kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/ChoixMatierePage.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { Search, InfoOutlined } from '@mui/icons-material'; // Icônes
 import MatiereCard from '../components/MatiereCard';
 import SkeletonLoader from '../components/common/SkeletonLoader';
+import NavigateBackButton from '../components/common/NavigateBackButton';
 import api from '../services/api';
-import { FALLBACK_SUBJECTS } from '../data/fallbackData';
 import './ChoixMatierePage.css';
 
 const ChoixMatierePage = () => {
   const { annee } = useParams(); 
   const [isLoading, setIsLoading] = useState(true);
-  const [matieresDisplay, setMatieresDisplay] = useState([]);
+  const [matieresRaw, setMatieresRaw] = useState([]); // Données brutes du serveur
+  const [searchQuery, setSearchQuery] = useState(''); // Recherche
 
+  // Récupération du contexte
   const filiereName = localStorage.getItem('selectedFiliereName');
   const filiereType = localStorage.getItem('selectedFiliereType'); 
   const niveauTechnique = filiereType ? `${filiereType}${annee}` : `L${annee}`; 
@@ -19,7 +22,7 @@ const ChoixMatierePage = () => {
   useEffect(() => {
     const fetchMatieres = async () => {
       try {
-        // 1. On récupère TOUS les cours
+        // 1. On demande au backend TOUS les cours pour ce niveau/filière
         const { data } = await api.get(`/api/courses`, {
             params: { 
                 filiere: filiereName,
@@ -27,50 +30,32 @@ const ChoixMatierePage = () => {
             }
         });
 
-        // 2. REGROUPEMENT INTELLIGENT PAR MATIÈRE
-        // On utilise un objet Map pour stocker les infos uniques
+        // 2. REGROUPEMENT PAR MATIÈRE UNIQUE
         const matieresMap = new Map();
 
         data.forEach(cours => {
-            // Comme le backend nettoie le nom, "Microbiologie" est la clé unique
-            const nomMatiere = cours.subject; 
+            const nomMatiere = cours.subject; // Le backend a déjà nettoyé le nom
             
             if (!matieresMap.has(nomMatiere)) {
                 matieresMap.set(nomMatiere, {
                     name: nomMatiere,
-                    hasTP: false, // Par défaut faux
+                    hasTP: false,
                     source: 'db'
                 });
             }
 
-            // DÉTECTION TP : Si CE cours est un TP, alors la matière a des TP !
+            // Si un des cours est un TP, la matière gagne le badge TP
             if (cours.type === 'TP') {
                 matieresMap.get(nomMatiere).hasTP = true;
             }
         });
 
-        // 3. Conversion en tableau
-        let displayList = Array.from(matieresMap.values());
-
-        // 4. Ajout des matières statiques (Fallback)
-        // Seulement si elles ne sont pas déjà dans la liste DB
-        FALLBACK_SUBJECTS.forEach(defaut => {
-            // On vérifie si le nom existe déjà (insensible à la casse pour être sûr)
-            const exists = displayList.some(m => m.name.toLowerCase() === defaut.name.toLowerCase());
-            if (!exists) {
-                displayList.push({ 
-                    name: defaut.name, 
-                    hasTP: false, 
-                    source: 'static' 
-                });
-            }
-        });
-
-        setMatieresDisplay(displayList);
+        // 3. On stocke la liste brute (sans les fallbacks statiques !)
+        setMatieresDisplay(Array.from(matieresMap.values()));
 
       } catch (error) {
         console.error("Erreur chargement matières", error);
-        setMatieresDisplay(FALLBACK_SUBJECTS.map(s => ({...s, hasTP:false})));
+        setMatieresRaw([]); // En cas d'erreur, liste vide
       } finally {
         setIsLoading(false);
       }
@@ -79,31 +64,89 @@ const ChoixMatierePage = () => {
     if (filiereName) {
         fetchMatieres();
     } else {
-        setMatieresDisplay(FALLBACK_SUBJECTS.map(s => ({...s, hasTP:false})));
         setIsLoading(false);
     }
   }, [annee, filiereName, niveauTechnique]);
 
+  // Helper pour mettre à jour le state (car j'ai utilisé setMatieresDisplay dans le code copié, 
+  // mais ici je sépare pour le filtrage)
+  const setMatieresDisplay = (list) => {
+      setMatieresRaw(list);
+  };
+
+  // FILTRAGE ET TRI (useMemo pour la perf)
+  const matieresAffichees = useMemo(() => {
+    let result = [...matieresRaw];
+
+    // 1. Recherche
+    if (searchQuery) {
+        result = result.filter(m => 
+            m.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }
+
+    // 2. Tri Alphabétique
+    result.sort((a, b) => a.name.localeCompare(b.name));
+
+    return result;
+  }, [matieresRaw, searchQuery]);
+
   return (
     <div className="choix-matiere-container">
-      <div style={{textAlign:'center', marginBottom:'2rem'}}>
-        <h1 className="choix-matiere-title">
-            Matières - {filiereName || "Général"}
-        </h1>
-        <span className="niveau-badge-large">Niveau {niveauTechnique}</span>
+      
+      <div className="matiere-page-header">
+        <NavigateBackButton />
+        <div className="header-text-content">
+            <h1 className="choix-matiere-title">
+                {filiereName || "Matières"}
+            </h1>
+            <span className="niveau-badge-large">Niveau {niveauTechnique}</span>
+        </div>
       </div>
 
+      {/* BARRE DE RECHERCHE (Seulement si on a des matières au départ) */}
+      {matieresRaw.length > 0 && (
+        <div className="search-bar-container">
+            <div className="search-input-wrapper">
+            <Search className="search-icon" />
+            <input 
+                type="text" 
+                placeholder="Rechercher une matière..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input-field"
+            />
+            </div>
+        </div>
+      )}
+
+      {/* CONTENU PRINCIPAL */}
       <div className="matiere-grid">
         {isLoading ? (
           Array.from({ length: 6 }).map((_, index) => (
             <SkeletonLoader key={index} />
           ))
+        ) : matieresRaw.length === 0 ? (
+          // CAS 1 : AUCUNE MATIÈRE PUBLIÉE (Le Modal/Message Joli)
+          <div className="empty-matiere-state">
+             <InfoOutlined sx={{ fontSize: 60, color: '#00aaff', mb: 2 }} />
+             <h3>Aucun cours disponible</h3>
+             <p>
+               Les professeurs n'ont pas encore publié de contenu pour 
+               cette filière en <strong>{niveauTechnique}</strong>.
+             </p>
+             <p className="sub-text">Revenez plus tard !</p>
+          </div>
+        ) : matieresAffichees.length === 0 ? (
+          // CAS 2 : AUCUN RÉSULTAT DE RECHERCHE
+          <div className="no-results">Aucune matière ne correspond à votre recherche.</div>
         ) : (
-          matieresDisplay.map((matiere, index) => (
+          // CAS 3 : AFFICHAGE NORMAL
+          matieresAffichees.map((matiere, index) => (
             <MatiereCard 
               key={index}
               name={matiere.name}
-              hasTP={matiere.hasTP} // Ceci sera TRUE si un prof a uploadé un TP !
+              hasTP={matiere.hasTP}
             />
           ))
         )}
