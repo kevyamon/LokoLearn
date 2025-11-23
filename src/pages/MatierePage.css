@@ -1,101 +1,165 @@
-.matiere-page-container {
-  padding: 100px 2rem 50px 2rem;
+/* kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/MatierePage.css */
+
+.matiere-page {
+  padding: 30px 2rem 50px 2rem;
   min-height: 100vh;
   color: white;
 }
 
-.content-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: rgba(0, 0, 0, 0.3);
-  padding: 30px;
-  border-radius: 15px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+.matiere-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.matiere-title {
+.matiere-main-title {
   text-align: center;
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin-bottom: 2rem;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
 }
 
-.placeholder-text {
-  text-align: center;
-  font-size: 1.5rem;
-  padding: 40px;
-}
-
-/* Styles pour le contenu de la modale de choix */
-.modal-choix-container {
+/* FLUX DES COURS (FEED) */
+.courses-feed {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 25px;
+  max-width: 700px; /* Largeur type Facebook */
+  margin: 0 auto;
 }
 
-.modal-choix-container h2 {
-  margin: 0;
-  font-size: 1.8rem;
-  text-align: center;
+/* CARTE DE POST */
+.course-post-card {
+  background: #ffffff;
+  color: #333;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  animation: fadeInUp 0.5s ease-out;
 }
 
-.modal-buttons {
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header du post */
+.post-header {
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
 }
 
-.modal-button {
-  padding: 12px 30px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
+.prof-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: #e4e6eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+}
+
+.post-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.prof-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.post-date {
+  font-size: 0.8rem;
+  color: #65676b;
+}
+
+/* Contenu */
+.course-title {
+  font-size: 1.3rem;
+  margin: 0 0 8px 0;
+  color: #1c1e21;
+}
+
+.course-desc {
+  color: #1c1e21;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+}
+
+/* Pièce jointe stylée */
+.post-attachment {
+  display: flex;
+  align-items: center;
+  background-color: #f0f2f5;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  color: white;
+  transition: background-color 0.2s ease;
 }
 
-.modal-button.cours {
-  background: linear-gradient(135deg, #007bff, #0056b3);
+.post-attachment:hover {
+  background-color: #e4e6eb;
 }
 
-.modal-button.tp {
-  background: linear-gradient(135deg, #28a745, #1e7e34);
+.file-icon {
+  margin-right: 15px;
 }
 
-.modal-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+.file-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-/* --- DEBUT DES STYLES POUR MOBILE --- */
+.file-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.file-type {
+  font-size: 0.8rem;
+  color: #65676b;
+  text-transform: uppercase;
+}
+
+.download-action {
+  color: #65676b;
+}
+
+/* Footer Stats */
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #e4e6eb;
+  color: #65676b;
+  font-size: 0.9rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Mobile */
 @media (max-width: 768px) {
-  .matiere-page-container {
-    padding: 80px 1rem 30px 1rem; /* On ajuste le padding global */
+  .matiere-page {
+    padding: 20px 10px 80px 10px;
   }
-
-  .content-section {
-    padding: 20px; /* On réduit le padding de la zone de contenu */
+  .matiere-header-top {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
   }
-
-  .matiere-title {
-    font-size: 2.2rem; /* On réduit le titre principal */
-  }
-
-  .accordion-container h2 {
-    font-size: 1.8rem; /* Titre du programme */
-  }
-
-  .accordion-header {
-    font-size: 1.1rem; /* Titre des chapitres */
-    padding: 15px;
-  }
-
-  .accordion-content li {
-    font-size: 1rem; /* Titre des leçons */
-    padding: 10px 12px;
+  .matiere-main-title {
+    font-size: 1.8rem;
   }
 }
-/* --- FIN DES STYLES POUR MOBILE --- */

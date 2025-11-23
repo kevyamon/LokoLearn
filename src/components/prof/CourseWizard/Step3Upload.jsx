@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, LinearProgress, Button, Alert } from '@mui/material';
 import { CloudUpload, CheckCircle } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom'; // Pour rediriger si erreur auth
+import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
 
 const Step3Upload = ({ data, update }) => {
@@ -26,7 +26,6 @@ const Step3Upload = ({ data, update }) => {
 
     try {
       // --- APPEL API RÉEL ---
-      // Note : 'api' injecte automatiquement le token du prof connecté
       const response = await api.post('/api/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
@@ -49,13 +48,13 @@ const Step3Upload = ({ data, update }) => {
       // Gestion spécifique des erreurs d'autorisation
       if (err.response && (err.response.status === 401 || err.response.status === 403)) {
          setError("Session expirée ou compte non autorisé. Veuillez vous reconnecter.");
-         // Optionnel : Déconnexion forcée après 2 secondes
+         // Redirection automatique après 3 secondes
          setTimeout(() => {
              localStorage.removeItem('profInfo');
              navigate('/prof/login');
          }, 3000);
       } else {
-         const message = err.response?.data?.message || "Échec de l'envoi. Vérifiez votre connexion ou la taille du fichier (Max 10Mo).";
+         const message = err.response?.data?.message || "Échec de l'envoi. Vérifiez votre connexion ou la taille du fichier (Max 15Mo).";
          setError(message);
       }
       
@@ -68,7 +67,8 @@ const Step3Upload = ({ data, update }) => {
   return (
     <Box sx={{ textAlign: 'center', py: 4, border: '2px dashed #ccc', borderRadius: 4, bgcolor: '#fafafa', position: 'relative' }}>
       <input
-        accept=".pdf,.doc,.docx,.ppt,.pptx"
+        // MODIFICATION : Liste complète des types acceptés (PDF, Word, PowerPoint)
+        accept=".pdf,.doc,.docx,.ppt,.pptx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
         style={{ display: 'none' }}
         id="upload-file-input"
         type="file"
@@ -85,7 +85,7 @@ const Step3Upload = ({ data, update }) => {
                 Cliquez ici pour déposer votre cours
                 </Typography>
                 <Typography variant="caption" display="block" mt={1} color="text.disabled">
-                PDF, Word, PowerPoint (Max 10MB)
+                PDF, Word, PowerPoint (Max 15MB)
                 </Typography>
             </>
         )}
