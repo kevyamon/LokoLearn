@@ -1,3 +1,5 @@
+/* kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/components/MatiereCard.css */
+
 .matiere-card {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -5,19 +7,21 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   padding: 20px;
-  border-radius: 10px;
-  min-height: 150px;
+  border-radius: 15px;
+  min-height: 160px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center; /* Centre verticalement */
   align-items: center;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
+  overflow: hidden; /* Important pour le bandeau */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+/* Effet de survol */
 .matiere-card:hover {
   transform: translateY(-8px);
   background: rgba(255, 255, 255, 0.15);
@@ -25,20 +29,117 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
-.matiere-card-content h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
+/* Contenu principal */
+.matiere-card-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: 25px; /* Espace pour le bandeau */
 }
 
-.tp-badge {
+.matiere-card-content h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* --- NOUVEAU BADGE TP --- */
+.tp-info-badge {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #007bff;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(90deg, #28a745, #20c997); /* Vert vibrant */
   color: white;
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 0;
+  text-align: center;
+  box-shadow: 0 -2px 10px rgba(40, 167, 69, 0.3);
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* --- STYLE DU MODAL DE CHOIX --- */
+.modal-choix-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.modal-choix-container h2 {
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.modal-subtitle {
+  color: #ccc;
+  margin-bottom: 30px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.modal-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 140px;
+  border: none;
+  border-radius: 15px;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.modal-button.cours {
+  background: linear-gradient(135deg, #007bff, #0056b3); /* Bleu */
+}
+
+.modal-button.tp {
+  background: linear-gradient(135deg, #28a745, #1e7e34); /* Vert */
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .modal-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  .modal-button {
+    width: 100%;
+    height: 100px;
+    flex-direction: row;
+    gap: 15px;
+  }
+  .modal-button svg {
+    margin-bottom: 0 !important;
+  }
 }
