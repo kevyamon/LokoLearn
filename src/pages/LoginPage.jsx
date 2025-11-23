@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { useConfirm } from '../contexts/ConfirmContext'; 
+import { useConfirm } from '../contexts/ConfirmContext';
+import { authService } from '../services/authService'; // <--- L'IMPORT MANQUANT ÉTAIT ICI !
 import './LoginPage.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { alertInfo, alertSuccessTimer } = useConfirm(); // NOUVEAU
+  const { alertInfo, alertSuccessTimer } = useConfirm();
   
   const [step, setStep] = useState(1); 
   const [mode, setMode] = useState('login'); 
@@ -37,19 +38,21 @@ const LoginPage = () => {
 
     try {
       const { data } = await api.post(endpoint, { matricule, password });
+      
+      // Utilisation du service d'auth (qui fonctionne maintenant grâce à l'import)
       authService.login('student', data);
       
-      // UTILISATION DU TIMER
       await alertSuccessTimer(
         "Connexion réussie", 
         `Bienvenue ${data.matricule}. Vous serez redirigé dans`, 
-        3 // secondes
+        3
       );
 
       navigate('/etudiant/dashboard');
 
     } catch (err) {
-      alertInfo("Échec", err.response?.data?.message || "Erreur", "error");
+      console.error(err); // Tu verras l'erreur exacte ici si ça plante encore
+      alertInfo("Échec", err.response?.data?.message || "Une erreur est survenue.", "error");
     } finally {
       setLoading(false);
     }

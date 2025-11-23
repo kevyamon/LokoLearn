@@ -4,7 +4,10 @@ import { BrowserRouter as Router, Routes, Route, Outlet, useNavigate, useLocatio
 
 // Contexts & Services
 import { ConfirmProvider, useConfirm } from './contexts/ConfirmContext';
-import { authService } from './services/authService'; // IMPORT
+import { authService } from './services/authService';
+
+// Composants Techniques
+import ScrollToTopController from './components/common/ScrollToTopController'; // 1. IMPORT DU CONTROLEUR
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -34,36 +37,23 @@ import ProfCourses from './pages/prof/ProfCourses';
 // Composants Communs
 import Header from './components/Header';
 import Footer from './components/Footer';
-import ScrollToTopButton from './components/common/ScrollToTopButton';
+import ScrollToTopButton from './components/common/ScrollToTopButton'; // Le bouton visuel (différent du controlleur)
 import SearchOverlay from './components/search/SearchOverlay';
 
 // --- COMPOSANT GARDIEN DE SESSION ---
-// C'est lui qui surveille l'expiration
 const SessionGuardian = () => {
   const { alertInfo } = useConfirm();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    const check = async () => {
-      // On ne vérifie pas sur la landing page ou login pour éviter les boucles
-      if (location.pathname === '/' || location.pathname.includes('/login')) return;
-
-      const sessionStatus = authService.checkSession();
-
-      if (sessionStatus && sessionStatus.expired) {
-        await alertInfo(
-          "Session Expirée", 
-          "Par mesure de sécurité, votre session a expiré après 24h. Veuillez vous reconnecter.", 
-          "info"
-        );
-        navigate('/');
-      }
-    };
-    
-    // Vérification au montage et à chaque changement de route important
-    check();
-  }, [location.pathname]); // Se déclenche quand on change de page
+    if (location.pathname === '/' || location.pathname.includes('/login')) return;
+    const sessionStatus = authService.checkSession();
+    if (sessionStatus && sessionStatus.expired) {
+      alertInfo("Session Expirée", "Votre session a expiré. Veuillez vous reconnecter.", "info");
+      navigate('/');
+    }
+  }, [location.pathname]);
 
   return null;
 };
@@ -72,7 +62,7 @@ const SessionGuardian = () => {
 const MainLayout = () => {
   return (
     <div className="app-background">
-      <SessionGuardian /> {/* Le gardien est actif ici */}
+      <SessionGuardian />
       <Header />
       <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <main style={{ flex: 1, width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
@@ -88,11 +78,14 @@ function App() {
   return (
     <ConfirmProvider>
       <Router>
+        {/* 2. ON ACTIVE LE CONTROLEUR ICI */}
+        {/* Il remettra la page en haut à chaque clic sur un lien */}
+        <ScrollToTopController /> 
+        
         <SearchOverlay />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           
-          {/* Login avec Header/Footer mais isolé du MainLayout */}
           <Route path="/login" element={
             <div className="app-background">
                 <Header />

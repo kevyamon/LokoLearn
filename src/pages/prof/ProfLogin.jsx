@@ -5,10 +5,11 @@ import { Email, Lock, School, ArrowBack } from '@mui/icons-material';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api';
 import { useConfirm } from '../../contexts/ConfirmContext'; 
+import { authService } from '../../services/authService'; // <--- L'IMPORT MANQUANT !
 
 const ProfLogin = () => {
   const navigate = useNavigate();
-  const { alertInfo, alertSuccessTimer } = useConfirm(); // NOUVEAU
+  const { alertInfo, alertSuccessTimer } = useConfirm();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
 
@@ -22,9 +23,9 @@ const ProfLogin = () => {
         password: formData.password 
       });
 
-      authService.login('student', data);
+      // Utilisation correcte du service
+      authService.login('professor', data);
       
-      // UTILISATION DU TIMER
       await alertSuccessTimer(
         "Connexion Professeur", 
         `Ravi de vous voir, ${data.name}. Redirection vers le bureau dans`, 
@@ -34,7 +35,8 @@ const ProfLogin = () => {
       navigate('/prof/dashboard');
 
     } catch (err) {
-      alertInfo("Accès refusé", err.response?.data?.message || 'Erreur', "error");
+      console.error(err);
+      alertInfo("Accès refusé", err.response?.data?.message || 'Erreur interne', "error");
     } finally {
       setLoading(false);
     }
