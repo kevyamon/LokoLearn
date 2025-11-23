@@ -8,8 +8,8 @@ import {
   Close, ZoomIn 
 } from '@mui/icons-material';
 import { 
-  Dialog, AppBar, Toolbar, IconButton, Typography, Slide, Box, Button // Button est bien là !
-} from '@mui/material';
+  Dialog, AppBar, Toolbar, IconButton, Typography, Slide, Box, Button, CircularProgress 
+} from '@mui/material'; // <--- BUTTON EST BIEN LÀ MAINTENANT
 import api from '../services/api';
 
 // Transition pour le modal plein écran
@@ -20,10 +20,8 @@ const Transition = forwardRef(function Transition(props, ref) {
 const MatierePage = () => {
   const { annee, matiereSlug } = useParams();
   
-  // --- CORRECTION CRITIQUE ICI ---
-  // On prend 'annee' tel quel car il contient déjà "BTS1", "L1", etc.
+  // On garde le niveau tel quel (L1, BTS1, etc.)
   const niveauTechnique = annee; 
-  // -------------------------------
 
   const [allCourses, setAllCourses] = useState([]); 
   const [filteredCourses, setFilteredCourses] = useState([]); 
@@ -41,7 +39,6 @@ const MatierePage = () => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        // Appel avec le bon niveau (BTS1)
         const { data } = await api.get(`/api/courses`, {
             params: { filiere: filiereName, level: niveauTechnique }
         });
@@ -102,6 +99,7 @@ const MatierePage = () => {
     return <Description style={{ color: '#555', fontSize: 40 }} />;
   };
 
+  // --- CŒUR DU SYSTÈME DE LECTURE ---
   const renderViewerContent = () => {
     if (!currentDoc) return null;
 
@@ -113,18 +111,24 @@ const MatierePage = () => {
                      currentDoc.fileType.includes('sheet') ||
                      currentDoc.fileType.includes('xls');
 
+    // On encode l'URL pour qu'elle passe bien dans les lecteurs
+    const encodedUrl = encodeURIComponent(currentDoc.fileUrl);
+
     if (isPdf) {
+        // SOLUTION ANTI-ECRAN NOIR : Utiliser Google Viewer pour les PDF aussi
+        // Cela contourne les restrictions 401/CORS des navigateurs
         return (
             <iframe 
-                src={currentDoc.fileUrl} 
-                title="Lecteur PDF"
+                src={`https://docs.google.com/gview?embedded=true&url=${encodedUrl}`}
+                title="Lecteur PDF Universel"
                 width="100%" 
                 height="100%" 
-                style={{ border: 'none', backgroundColor: '#333' }} 
+                frameBorder="0"
+                style={{ border: 'none', backgroundColor: '#2c2c2c' }} 
             />
         );
     } else if (isOffice) {
-        const encodedUrl = encodeURIComponent(currentDoc.fileUrl);
+        // Lecteur Microsoft pour Word/Excel/PPT
         return (
             <iframe 
                 src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}`} 
@@ -134,10 +138,10 @@ const MatierePage = () => {
                 title="Lecteur Office"
                 style={{ border: 'none' }}
             >
-                Ce navigateur ne supporte pas la visualisation de ce fichier.
             </iframe>
         );
     } else {
+        // Fallback
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100%" color="white">
                 <Typography variant="h5" gutterBottom>Aperçu non disponible</Typography>
@@ -146,7 +150,7 @@ const MatierePage = () => {
                     startIcon={<Download />} 
                     onClick={(e) => handleDownload(e, currentDoc)}
                 >
-                    Télécharger le fichier pour le voir
+                    Télécharger le fichier
                 </Button>
             </Box>
         );
@@ -158,7 +162,6 @@ const MatierePage = () => {
       <div className="container">
         <div className="matiere-header-top">
             <NavigateBackButton />
-            {/* On affiche le bon niveau maintenant */}
             <span className="niveau-badge">{filiereName} - {niveauTechnique}</span>
         </div>
         
