@@ -22,7 +22,7 @@ const ProfLogin = () => {
         password: formData.password 
       });
 
-      localStorage.setItem('profInfo', JSON.stringify(data));
+      authService.login('student', data);
       
       // UTILISATION DU TIMER
       await alertSuccessTimer(

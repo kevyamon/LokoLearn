@@ -37,7 +37,7 @@ const LoginPage = () => {
 
     try {
       const { data } = await api.post(endpoint, { matricule, password });
-      localStorage.setItem('userInfo', JSON.stringify(data));
+      authService.login('student', data);
       
       // UTILISATION DU TIMER
       await alertSuccessTimer(

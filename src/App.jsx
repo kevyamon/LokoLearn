@@ -1,9 +1,10 @@
 // kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/App.jsx
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Outlet, useNavigate, useLocation } from 'react-router-dom';
 
-// Contexts
-import { ConfirmProvider } from './contexts/ConfirmContext';
+// Contexts & Services
+import { ConfirmProvider, useConfirm } from './contexts/ConfirmContext';
+import { authService } from './services/authService'; // IMPORT
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -33,19 +34,47 @@ import ProfCourses from './pages/prof/ProfCourses';
 // Composants Communs
 import Header from './components/Header';
 import Footer from './components/Footer';
-// import Breadcrumbs from './components/common/Breadcrumbs'; // RETIRÉ
 import ScrollToTopButton from './components/common/ScrollToTopButton';
 import SearchOverlay from './components/search/SearchOverlay';
+
+// --- COMPOSANT GARDIEN DE SESSION ---
+// C'est lui qui surveille l'expiration
+const SessionGuardian = () => {
+  const { alertInfo } = useConfirm();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const check = async () => {
+      // On ne vérifie pas sur la landing page ou login pour éviter les boucles
+      if (location.pathname === '/' || location.pathname.includes('/login')) return;
+
+      const sessionStatus = authService.checkSession();
+
+      if (sessionStatus && sessionStatus.expired) {
+        await alertInfo(
+          "Session Expirée", 
+          "Par mesure de sécurité, votre session a expiré après 24h. Veuillez vous reconnecter.", 
+          "info"
+        );
+        navigate('/');
+      }
+    };
+    
+    // Vérification au montage et à chaque changement de route important
+    check();
+  }, [location.pathname]); // Se déclenche quand on change de page
+
+  return null;
+};
 
 // --- LAYOUT PRINCIPAL ---
 const MainLayout = () => {
   return (
     <div className="app-background">
+      <SessionGuardian /> {/* Le gardien est actif ici */}
       <Header />
       <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        
-        {/* Breadcrumbs RETIRÉ ICI pour alléger le design */}
-        
         <main style={{ flex: 1, width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
           <Outlet />
         </main>
@@ -62,7 +91,15 @@ function App() {
         <SearchOverlay />
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<div className="app-background"><Header /><div style={{ paddingTop: '80px' }}><LoginPage /></div><Footer /></div>} />
+          
+          {/* Login avec Header/Footer mais isolé du MainLayout */}
+          <Route path="/login" element={
+            <div className="app-background">
+                <Header />
+                <div style={{ paddingTop: '80px' }}><LoginPage /></div>
+                <Footer />
+            </div>
+          } />
 
           <Route element={<MainLayout />}>
             <Route path="/etudiant/dashboard" element={<StudentDashboard />} />

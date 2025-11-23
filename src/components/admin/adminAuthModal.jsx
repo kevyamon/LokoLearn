@@ -37,7 +37,7 @@ const AdminAuthModal = ({ open, onClose }) => {
       const { data } = await api.post(endpoint, formData);
       
       // SUCCÈS : On enregistre le badge ADMIN
-      localStorage.setItem('adminInfo', JSON.stringify(data));
+      authService.login('student', data);
       
       // On ferme le modal
       onClose();
