@@ -9,8 +9,9 @@ import {
 } from '@mui/icons-material';
 import { 
   Dialog, AppBar, Toolbar, IconButton, Typography, Slide, Box, Button, CircularProgress 
-} from '@mui/material'; // <-- L'IMPORT MANQUANT EST BIEN LÀ
+} from '@mui/material';
 import api from '../services/api';
+import { useConfirm } from '../contexts/ConfirmContext'; // <-- Utiliser le context pour les erreurs
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -27,6 +28,7 @@ const MatierePage = () => {
 
   const [viewerOpen, setViewerOpen] = useState(false);
   const [currentDoc, setCurrentDoc] = useState(null); 
+  const { alertInfo } = useConfirm(); // <-- On récupère l'outil alerte
 
   const filiereName = localStorage.getItem('selectedFiliereName');
   const displayTitle = matiereSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
@@ -66,49 +68,69 @@ const MatierePage = () => {
 
   const trackView = async (courseId) => {
     try {
-        // La route /view incrémente les vues et les téléchargements ensemble (voir CourseController)
         await api.put(`/api/courses/${courseId}/view`);
         
-        // CORRECTION D'ÉTAT : On incrémente les deux pour refléter ce que fait le backend
         setFilteredCourses(prev => prev.map(c => 
             c._id === courseId ? { 
                 ...c, 
                 views: (c.views || 0) + 1,
-                downloads: (c.downloads || 0) + 1 // C'est incorrect, mais reflète ce que fait l'API. On doit corriger l'API pour séparer.
+                downloads: (c.downloads || 0) + 1
             } : c
         ));
     } catch (e) { console.error(e); }
   };
+  
+  // NOUVELLE FONCTION CORE : Récupérer l'URL signée
+  const getSecureFileUrl = async (courseId) => {
+    try {
+        const { data } = await api.get(`/api/courses/${courseId}/signed-url`);
+        return data.signedUrl;
+    } catch (e) {
+        console.error("Erreur de signature d'URL:", e);
+        // Alerte utilisateur que l'accès est refusé
+        alertInfo("Accès Refusé", e.response?.data?.message || "Erreur de connexion/autorisation pour accéder au fichier.", "error");
+        return null;
+    }
+  };
+
 
   const handleDownload = async (e, course) => {
     e.stopPropagation(); 
-    try {
-      // 1. Ouvrir le fichier. Grâce à la correction Backend, ceci devrait marcher sans 401.
-      window.open(course.fileUrl, '_blank');
-      
-      // 2. Appeler le tracking (Ceci est le seul endroit qui devrait déclencher l'incrémentation
-      // du compteur de TÉLÉCHARGEMENT/VUE.
-      // NOTE: L'API actuelle (incrementView) incrémente Vues ET Téléchargements.
-      // On conserve ce comportement en attendant une modification de l'API.
-      await api.put(`/api/courses/${course._id}/view`); 
-      
-      // Mise à jour de l'état local pour rafraîchir le compteur sans recharger
-      setFilteredCourses(prev => prev.map(c => 
-          c._id === course._id ? { 
-              ...c, 
-              views: (c.views || 0) + 1, 
-              downloads: (c.downloads || 0) + 1 
-          } : c
-      ));
+    
+    // 1. Récupérer l'URL signée
+    const signedUrl = await getSecureFileUrl(course._id);
 
-    } catch (e) { console.error(e); }
+    if (signedUrl) {
+        try {
+          // 2. Ouvrir le fichier. L'URL signée passe l'authentification Cloudinary.
+          window.open(signedUrl, '_blank');
+          
+          // 3. Appeler le tracking
+          await api.put(`/api/courses/${course._id}/view`); 
+          
+          // Mise à jour de l'état local
+          setFilteredCourses(prev => prev.map(c => 
+              c._id === course._id ? { 
+                  ...c, 
+                  views: (c.views || 0) + 1, 
+                  downloads: (c.downloads || 0) + 1 
+              } : c
+          ));
+        } catch (e) { console.error("Erreur de téléchargement:", e); }
+    }
   };
 
-  const handlePreview = (course) => {
-    setCurrentDoc(course);
-    setViewerOpen(true);
-    // On appelle la fonction de tracking qui va incrémenter le compteur.
-    trackView(course._id); 
+  const handlePreview = async (course) => {
+    // 1. Récupérer l'URL signée
+    const signedUrl = await getSecureFileUrl(course._id);
+    
+    if (signedUrl) {
+      // 2. Mettre à jour le document avec l'URL SECURE pour le visualiseur
+      setCurrentDoc({ ...course, fileUrl: signedUrl });
+      setViewerOpen(true);
+      // 3. Appeler la fonction de tracking (vue/download)
+      trackView(course._id); 
+    }
   };
 
   const getFileIcon = (type) => {
@@ -121,6 +143,9 @@ const MatierePage = () => {
   const renderViewerContent = () => {
     if (!currentDoc) return null;
 
+    // Utilisation de l'URL signée
+    const urlToUse = currentDoc.fileUrl; 
+
     const isPdf = currentDoc.fileType.includes('pdf');
     const isOffice = currentDoc.fileType.includes('word') || 
                      currentDoc.fileType.includes('doc') || 
@@ -130,10 +155,10 @@ const MatierePage = () => {
                      currentDoc.fileType.includes('xls');
 
     if (isPdf) {
-        // SOLUTION ROBUSTE : UTILISER LA BALISE <OBJECT> POUR LES PDF
         return (
             <object
-                data={currentDoc.fileUrl}
+                // On utilise l'URL signée ici
+                data={urlToUse} 
                 type="application/pdf"
                 width="100%"
                 height="100%"
@@ -144,7 +169,8 @@ const MatierePage = () => {
                     <Button 
                         variant="contained" 
                         startIcon={<Download />} 
-                        onClick={(e) => handleDownload(e, currentDoc)}
+                        // On réutilise la fonction de download (qui va re-signer le lien)
+                        onClick={(e) => handleDownload(e, currentDoc)} 
                     >
                         Télécharger pour voir
                     </Button>
@@ -152,9 +178,10 @@ const MatierePage = () => {
             </object>
         );
     } else if (isOffice) {
-        const encodedUrl = encodeURIComponent(currentDoc.fileUrl);
+        const encodedUrl = encodeURIComponent(urlToUse);
         return (
             <iframe 
+                // Office Online Viewer fonctionne avec l'URL Cloudinary, même signée
                 src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}`} 
                 width="100%" 
                 height="100%" 
