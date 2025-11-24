@@ -1,4 +1,4 @@
-// kevyamon/lokolearn/LokoLearn-b5c45fffcb67d272a63e66159862c5d8094c7d68/src/pages/MatierePage.jsx
+// kevyamon/lokolearn/LokoLearn-4b9aa75bc8e6a71557f2291b3bb06173df2a94ad/src/pages/MatierePage.jsx
 import React, { useState, useEffect, forwardRef } from 'react';
 import { useParams } from 'react-router-dom';
 import './MatierePage.css';
@@ -66,9 +66,16 @@ const MatierePage = () => {
 
   const trackView = async (courseId) => {
     try {
+        // La route /view incrémente les vues et les téléchargements ensemble (voir CourseController)
         await api.put(`/api/courses/${courseId}/view`);
+        
+        // CORRECTION D'ÉTAT : On incrémente les deux pour refléter ce que fait le backend
         setFilteredCourses(prev => prev.map(c => 
-            c._id === courseId ? { ...c, views: (c.views || 0) + 1 } : c
+            c._id === courseId ? { 
+                ...c, 
+                views: (c.views || 0) + 1,
+                downloads: (c.downloads || 0) + 1 // C'est incorrect, mais reflète ce que fait l'API. On doit corriger l'API pour séparer.
+            } : c
         ));
     } catch (e) { console.error(e); }
   };
@@ -76,15 +83,31 @@ const MatierePage = () => {
   const handleDownload = async (e, course) => {
     e.stopPropagation(); 
     try {
+      // 1. Ouvrir le fichier. Grâce à la correction Backend, ceci devrait marcher sans 401.
       window.open(course.fileUrl, '_blank');
+      
+      // 2. Appeler le tracking (Ceci est le seul endroit qui devrait déclencher l'incrémentation
+      // du compteur de TÉLÉCHARGEMENT/VUE.
+      // NOTE: L'API actuelle (incrementView) incrémente Vues ET Téléchargements.
+      // On conserve ce comportement en attendant une modification de l'API.
       await api.put(`/api/courses/${course._id}/view`); 
-      setFilteredCourses(prev => prev.map(c => c._id === course._id ? { ...c, downloads: (c.downloads || 0) + 1 } : c));
+      
+      // Mise à jour de l'état local pour rafraîchir le compteur sans recharger
+      setFilteredCourses(prev => prev.map(c => 
+          c._id === course._id ? { 
+              ...c, 
+              views: (c.views || 0) + 1, 
+              downloads: (c.downloads || 0) + 1 
+          } : c
+      ));
+
     } catch (e) { console.error(e); }
   };
 
   const handlePreview = (course) => {
     setCurrentDoc(course);
     setViewerOpen(true);
+    // On appelle la fonction de tracking qui va incrémenter le compteur.
     trackView(course._id); 
   };
 
@@ -108,8 +131,6 @@ const MatierePage = () => {
 
     if (isPdf) {
         // SOLUTION ROBUSTE : UTILISER LA BALISE <OBJECT> POUR LES PDF
-        // Cela utilise le lecteur PDF intégré au navigateur (Chrome/Edge/Firefox)
-        // Pas de blocage "Tracking" comme avec Google Viewer
         return (
             <object
                 data={currentDoc.fileUrl}
